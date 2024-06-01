@@ -6,11 +6,13 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useAuth from "../hooks/useAuth";
-
+import axios from "axios";
+import usePublic from "../hooks/usePublic";
 const Register = () => {
   const { createUser, setLoading, googleUser, twitterhUser, updateUser } =
     useAuth();
   const navigate = useNavigate();
+  const axiosPubic = usePublic();
   const [captcha, setcaptcha] = useState("");
   const [recaptchaValid, setRecaptchaValid] = useState(false); // State to track reCAPTCHA
   const [captchaLoaded, setCaptchaLoaded] = useState(false);
@@ -20,7 +22,7 @@ const Register = () => {
 
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
     const { email, password, username, photo } = data;
     setcaptcha("");
@@ -29,12 +31,45 @@ const Register = () => {
       setcaptcha("Please complete the reCAPTCHA");
       return;
     }
+    const formData = new FormData();
+    formData.append("image", photo[0]); // Access the uploaded file
+    const imgbbRes = await axios.post(
+      `https://api.imgbb.com/1/upload?key=${
+        import.meta.env.VITE_IMGBB_API_KEY
+      }`,
+      formData
+    );
+    const imageUrl = imgbbRes.data.data.url;
     createUser(email, password)
       .then((res) => {
         console.log(res.user);
-        updateUser(username, photo);
+        const currentuser = res?.user;
+        if (currentuser) {
+          const userData = {
+            email: currentuser?.email,
+            uid:currentuser?.uid,
+            role: "user",
+          };
+          axiosPubic
+            .post("/users", userData)
+            .then((res) => {
+              console.log(res.data);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        }
+        updateUser(username, imageUrl)
+          .then(() => {
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
         navigate(location?.state ? location.state : "/");
-        toast.success("User login successfully");
+        toast.success("User create successfully", {
+          duration: 4000,
+          position: "top-center",
+        });
       })
       .catch((error) => {
         toast.error(error?.message.split(":")[1]);
@@ -45,8 +80,27 @@ const Register = () => {
     googleUser()
       .then((res) => {
         console.log(res.user);
+        const currentuser = res?.user;
+        if (currentuser) {
+          const userData = {
+            email: currentuser?.email,
+            uid:currentuser?.uid,
+            role: "user",
+          };
+          axiosPubic
+            .post("/users", userData)
+            .then((res) => {
+              console.log(res.data);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        }
         navigate(location?.state ? location.state : "/");
-        toast.success("User login successfully");
+        toast.success("User login successfully", {
+          duration: 4000,
+          position: "top-center",
+        });
       })
       .catch((error) => {
         toast.error(error?.message.split(":")[1]);
@@ -55,9 +109,29 @@ const Register = () => {
   };
   const handleTwitter = () => {
     twitterhUser()
-      .then(() => {
+      .then((res) => {
+        console.log(res.user);
+        const currentuser = res?.user;
+        if (currentuser) {
+          const userData = {
+            email: currentuser?.email,
+            uid:currentuser?.uid,
+            role: "user",
+          };
+          axiosPubic
+            .post("/users", userData)
+            .then((res) => {
+              console.log(res.data);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        }
         navigate(location?.state ? location.state : "/");
-        toast.success("User login successfully");
+        toast.success("User login successfully", {
+          duration: 4000,
+          position: "top-center",
+        });
       })
       .catch((error) => {
         toast.error(error?.message.split(":")[1]);
@@ -77,7 +151,7 @@ const Register = () => {
   }, []);
   return (
     <div>
-      <div className="hero min-h-[calc(100vh-240px)] ">
+      <div className="hero ">
         <div className="min-w-[500px]  ">
           <div className="card w-full  shadow-2xl">
             <div className="text-center ">

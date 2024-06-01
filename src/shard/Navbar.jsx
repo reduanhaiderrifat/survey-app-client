@@ -3,10 +3,14 @@ import { Link, NavLink } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { FaBars } from "react-icons/fa";
 import toast from "react-hot-toast";
+import usePublic from "../hooks/usePublic";
+import { useQuery } from "@tanstack/react-query";
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
   const [theme, setTheme] = useState("light");
+  const axiosPubic = usePublic();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const links = (
     <>
       <li>
@@ -46,33 +50,44 @@ const Navbar = () => {
       toast.success("Logout successfully");
     });
   };
+  const handleDropdownToggle = () => {
+    setDropdownOpen((prev) => !prev);
+  };
+
+  const { data: formars = {},error } = useQuery({
+    queryKey: ["users", user?.email],
+    enabled: !!user?.email, 
+    queryFn: async () => {
+      const res = await axiosPubic.get(`/users/${user?.email}`);
+      return res.data;
+    },
+  });
+  if(error) {
+    console.log(error);
+  }
+  const roles = Array.isArray(formars) ? formars.map(f => f?.role) : [];
+  console.log(roles);
   return (
     <div>
-      <div className="navbar bg-base-100 fixed z-50 top-0 ">
+      <div className="navbar bg-base-100 fixed z-50 top-0 shadow-lg">
         <div className="navbar-start">
           <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h8m-8 6h16"
-                />
-              </svg>
-            </div>
-            <ul
+            <div
               tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+              role="button"
+              onClick={handleDropdownToggle}
+              className="btn btn-ghost lg:hidden"
             >
-              {links}
-            </ul>
+              <FaBars size={25} />
+            </div>
+            {dropdownOpen && (
+              <ul
+                tabIndex={0}
+                className="menu  dropdown-content mt-3 space-y-3 z-50 p-2 shadow bg-base-100 rounded-box w-[400px]"
+              >
+                {links}
+              </ul>
+            )}
           </div>
           <a className="btn btn-ghost text-2xl font-bold">
             Survey<span className="text-rose-500">Sense</span>{" "}
@@ -81,7 +96,7 @@ const Navbar = () => {
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{links}</ul>
         </div>
-        <div className="navbar-end space-x-5">
+        <div className="navbar-end space-x-2 md:space-x-5">
           <label className="cursor-pointer grid place-items-center">
             <input
               type="checkbox"
@@ -122,10 +137,10 @@ const Navbar = () => {
           {/* user drop down */}
           <details className="dropdown  dropdown-end">
             <summary className="m-1 btn space-x-2 rounded-full hover:shadow-xl hover:bg-transparent bg-transparent">
-              <FaBars size={20}/>
+              <FaBars size={20} />
               <img
-                className="w-10 rounded-full"
-                src={user?.photoURL || 'https://i.ibb.co/kqv0XFH/user.png'}
+                className="w-10 h-10 rounded-full"
+                src={user?.photoURL || "https://i.ibb.co/kqv0XFH/user.png"}
                 alt=""
               />
             </summary>
@@ -133,8 +148,16 @@ const Navbar = () => {
             <ul className="p-2 shadow menu dropdown-content z-10 bg-base-100 rounded-box w-52">
               {user ? (
                 <>
-                  <button className="btn mb-2 text-rose-500 border-rose-500 bg-transparent hover:bg-rose-500 hover:text-white">Dashboard</button>
-                  <button onClick={handleLogout} className="btn text-rose-500 border-rose-500 bg-transparent hover:bg-rose-500 hover:text-white">
+                  <Link
+                    to={`/dashboard/${roles}`}
+                    className="btn mb-2 text-rose-500 border-rose-500 bg-transparent hover:bg-rose-500 hover:text-white"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="btn text-rose-500 border-rose-500 bg-transparent hover:bg-rose-500 hover:text-white"
+                  >
                     Logout
                   </button>
                 </>

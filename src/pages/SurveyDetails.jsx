@@ -2,7 +2,7 @@
 
 const SurveyDetails = () => {
     return (
-        <div>
+        <div className="">
             <h3>survery page</h3>
         </div>
     );

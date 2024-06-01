@@ -11,9 +11,11 @@ import {
 import { createContext, useEffect, useState } from "react";
 import auth from "../firebase/Firebase.config";
 
+
 export const AuthContext = createContext(null);
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+
   const [reloader, setReloader] = useState(false);
   const [loading, setLoading] = useState(true);
   const googleProvider = new GoogleAuthProvider();
@@ -34,10 +36,10 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     return signInWithPopup(auth, twitterProvider);
   };
-  const updateUser = async (username, photo) => {
+  const updateUser = async (username, imageUrl) => {
     return updateProfile(auth.currentUser, {
       displayName: username,
-      photoURL: photo,
+      photoURL: imageUrl,
     }).then(() => {
       setReloader(Math.random());
     });
@@ -49,16 +51,6 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsuscribe = onAuthStateChanged(auth, (currentuser) => {
       setUser(currentuser);
-      //   const loggedUser = { email: currentuser?.email };
-      //   if (currentuser) {
-      //     axiosSecure.post(`/jwt`, loggedUser).then(() => {
-      //       setLoading(false);
-      //     });
-      //   } else {
-      //     axiosSecure.post(`/logout`, loggedUser).then(() => {
-      //       setLoading(false);
-      //     });
-      //   }
       setLoading(false);
     });
     return () => unsuscribe();

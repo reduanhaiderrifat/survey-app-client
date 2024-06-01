@@ -1,18 +1,20 @@
 import { useState, useEffect } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Google from "../components/Social/Google";
-import Twitter from "../components/Social/Twitter";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import useAuth from "../hooks/useAuth";
-
+import usePublic from "../hooks/usePublic";
+import Twitter from "../components/Social/Twitter";
 const Login = () => {
-  const { singInUser,setLoading,googleUser,twitterhUser} = useAuth()
+  const { singInUser, setLoading, googleUser, twitterhUser } = useAuth();
   const navigate = useNavigate();
-  const[captcha,setcaptcha] = useState('')
+  const [captcha, setcaptcha] = useState("");
+  const axiosPubic = usePublic();
+  const location = useLocation();
   const [captchaLoaded, setCaptchaLoaded] = useState(false);
-  const [recaptchaValid, setRecaptchaValid] = useState(false); // State to track reCAPTCHA
+  const [recaptchaValid, setRecaptchaValid] = useState(false);
 
   const {
     register,
@@ -23,45 +25,86 @@ const Login = () => {
   const onSubmit = (data) => {
     console.log(data);
     const { email, password } = data;
-    setcaptcha("")
+    setcaptcha("");
 
     if (!recaptchaValid) {
       toast.error("Please complete the reCAPTCHA");
-      setcaptcha("Please complete the reCAPTCHA")
+      setcaptcha("Please complete the reCAPTCHA");
       return;
     }
-   singInUser(email, password)
-   .then(() => {
-     navigate(location?.state ? location.state : "/");
-     toast.success("User login successfully");
-   })
-   .catch((error) => {
-     toast.error(error?.message.split(":")[1]);
-     setLoading(false);
-    });
+    singInUser(email, password)
+      .then(() => {
+        navigate(location?.state ? location.state : "/");
+        toast.success("User login successfully", {
+          duration: 4000,
+          position: "top-center",
+        });
+      })
+      .catch((error) => {
+        toast.error(error?.message.split(":")[1]);
+        setLoading(false);
+      });
   };
   const handleGoogle = () => {
     googleUser()
-     .then((res) => {
-      console.log(res.user);
-      navigate(location?.state ? location.state : "/");
-      toast.success("User login successfully");
-    })
-     .catch((error) => {
-      toast.error(error?.message.split(":")[1]);
-      setLoading(false);
-    });
+      .then((res) => {
+        console.log(res.user);
+        const currentuser = res?.user;
+        if (currentuser) {
+          const userData = {
+            email: currentuser?.email,
+            role: "user",
+          };
+          axiosPubic
+            .post("/users", userData)
+            .then((res) => {
+              console.log(res.data);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        }
+        navigate(location?.state ? location.state : "/");
+        toast.success("User login successfully", {
+          duration: 4000,
+          position: "top-center",
+        });
+      })
+      .catch((error) => {
+        toast.error(error?.message.split(":")[1]);
+        setLoading(false);
+      });
   };
   const handleTwitter = () => {
     twitterhUser()
-     .then(() => {
-      navigate(location?.state ? location.state : "/");
-      toast.success("User login successfully");
-    })
-     .catch((error) => {
-      toast.error(error?.message.split(":")[1]);
-      setLoading(false);
-    });
+      .then((res) => {
+        console.log(res.user);
+        const currentuser = res?.user;
+        if (currentuser) {
+          const userData = {
+            email: currentuser?.email,
+            uid: currentuser?.uid,
+            role: "user",
+          };
+          axiosPubic
+            .post("/users", userData)
+            .then((res) => {
+              console.log(res.data);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        }
+        navigate(location?.state ? location.state : "/");
+        toast.success("User login successfully", {
+          duration: 4000,
+          position: "top-center",
+        });
+      })
+      .catch((error) => {
+        toast.error(error?.message.split(":")[1]);
+        setLoading(false);
+      });
   };
   function onChange(value) {
     console.log("Captcha value:", value);
@@ -78,7 +121,7 @@ const Login = () => {
 
   return (
     <div>
-      <div className="hero min-h-[calc(100vh-240px)] ">
+      <div className="hero  ">
         <div className="min-w-[500px]">
           <div className="card w-full  shadow-2xl">
             <div className="text-center ">
@@ -144,7 +187,8 @@ const Login = () => {
                   sitekey={`${import.meta.env.VITE_RECAPTCHA_SITE_KEY}`}
                   onChange={onChange}
                 />
-              )} {captcha&& <span className="text-red-500">{captcha}</span>}
+              )}{" "}
+              {captcha && <span className="text-red-500">{captcha}</span>}
               <div className="form-control mt-6">
                 <button className="btn bg-rose-500 hover:bg-rose-500 text-white text-lg">
                   Login
