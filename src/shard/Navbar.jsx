@@ -55,13 +55,14 @@ const Navbar = () => {
   };
 
   const { data: formars = {},error } = useQuery({
-    queryKey: ["users", user?.email],
-    enabled: !!user?.email, 
+    queryKey: ["users", user?.uid],
+    enabled: !!user?.uid, 
     queryFn: async () => {
-      const res = await axiosPubic.get(`/users/${user?.email}`);
+      const res = await axiosPubic.get(`/users/${user?.uid}`);
       return res.data;
     },
   });
+  console.log(user?.uid);
   if(error) {
     console.log(error);
   }

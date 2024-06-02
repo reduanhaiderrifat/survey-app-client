@@ -7,10 +7,14 @@ import Register from "../pages/Register";
 import PrivetRoute from "../Privet/PrivetRoute";
 import Surveys from "../pages/Surveys";
 
-import UserDashboard from "../components/DashBoard/UserDashboard";
-import AdminDashboard from "../components/DashBoard/AdminDashboard";
+
+
 import SurveyorDashboard from "../components/DashBoard/SurveyorDashboard";
 import DashBoard from "../layout/DashBoard";
+import UpdateForm from "../components/DashBoard/Surveyor/UpdateForm";
+import SurveyorDetails from "../components/DashBoard/Surveyor/SurveyorDetails";
+import UserDashBoard from "../components/DashBoard/User/UserDashBoard";
+import AdminDashboard from "../components/DashBoard/AdminDashboard.jsx/AdminDashboard";
 
 const router = createBrowserRouter([
   {
@@ -50,7 +54,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "user",
-        element: <UserDashboard />,
+        element: <UserDashBoard />,
       },
       {
         path: "admin",
@@ -59,6 +63,14 @@ const router = createBrowserRouter([
       {
         path: "surveyor",
         element: <SurveyorDashboard />,
+      },
+      {
+        path: "surveyor/update/:id",
+        element: <UpdateForm />,
+      },
+      {
+        path: "surveyor/details/:id",
+        element: <SurveyorDetails />,
       },
     ],
   },

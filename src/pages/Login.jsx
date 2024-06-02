@@ -52,7 +52,8 @@ const Login = () => {
         const currentuser = res?.user;
         if (currentuser) {
           const userData = {
-            email: currentuser?.email,
+            email: currentuser?.email || "email not add",
+            uid:currentuser?.uid,
             role: "user",
           };
           axiosPubic
@@ -82,7 +83,7 @@ const Login = () => {
         const currentuser = res?.user;
         if (currentuser) {
           const userData = {
-            email: currentuser?.email,
+            email: currentuser?.email || "email not add",
             uid: currentuser?.uid,
             role: "user",
           };

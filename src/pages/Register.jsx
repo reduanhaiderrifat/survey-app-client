@@ -32,7 +32,7 @@ const Register = () => {
       return;
     }
     const formData = new FormData();
-    formData.append("image", photo[0]); // Access the uploaded file
+    formData.append("image", photo[0]);
     const imgbbRes = await axios.post(
       `https://api.imgbb.com/1/upload?key=${
         import.meta.env.VITE_IMGBB_API_KEY
@@ -46,7 +46,7 @@ const Register = () => {
         const currentuser = res?.user;
         if (currentuser) {
           const userData = {
-            email: currentuser?.email,
+            email: currentuser?.email ||"email not add",
             uid:currentuser?.uid,
             role: "user",
           };
@@ -83,7 +83,7 @@ const Register = () => {
         const currentuser = res?.user;
         if (currentuser) {
           const userData = {
-            email: currentuser?.email,
+            email: currentuser?.email ||"email not add",
             uid:currentuser?.uid,
             role: "user",
           };
@@ -114,7 +114,7 @@ const Register = () => {
         const currentuser = res?.user;
         if (currentuser) {
           const userData = {
-            email: currentuser?.email,
+            email: currentuser?.email ||"email not add",
             uid:currentuser?.uid,
             role: "user",
           };
