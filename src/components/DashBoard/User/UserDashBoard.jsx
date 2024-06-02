@@ -54,7 +54,7 @@ const UserDashBoard = () => {
                   }
                   onClick={() => setActiveSection("Survey")}
                 >
-                  <span className="text-lg font-bold">Survey manage</span>
+                  <span className="text-lg font-bold">Survey</span>
                 </button>
               </li>
               <li>
