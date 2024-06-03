@@ -6,11 +6,11 @@ import { FaArrowDown } from "react-icons/fa";
 
 const ManageUser = () => {
   const axiosSecure = useAxiosSecure();
-  const [sortRole,setSortRole] = useState('')
+  const [sortRole, setSortRole] = useState("");
   const modalRef = useRef(null);
   const [userId, setUserId] = useState(null);
-const { data: users = [], refetch } = useQuery({
-    queryKey: ["users", sortRole], 
+  const { data: users = [], refetch } = useQuery({
+    queryKey: ["users", sortRole],
     queryFn: async () => {
       const response = await axiosSecure.get(`/adminUsers?status=${sortRole}`);
       return response.data;
@@ -27,9 +27,9 @@ const { data: users = [], refetch } = useQuery({
     setUserId(id);
   };
   console.log(userId);
-const handlerolesort=(sort)=>{
-    setSortRole(sort)
-}
+  const handlerolesort = (sort) => {
+    setSortRole(sort);
+  };
   const handleButtonClick = async (role) => {
     console.log(`Promoted to ${role}`);
     const res = await axiosSecure.patch(`/adminUpdate/${userId}`, { role });
@@ -47,29 +47,40 @@ const handlerolesort=(sort)=>{
   };
   return (
     <div>
-        <div className="flex justify-end">
-      <div className="dropdown dropdown-hover dropdown-left">
-        <div tabIndex={0} role="button" className="btn m-1 bg-transparent text-rose-500 border-rose-500 hover:bg-rose-500 hover:text-white">
-          Sort by Role <FaArrowDown />
+      <div className="flex justify-end">
+        <div className="dropdown dropdown-hover dropdown-left">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn m-1 bg-transparent text-rose-500 border-rose-500 hover:bg-rose-500 hover:text-white"
+          >
+            Sort by Role <FaArrowDown />
+          </div>
+          <ul
+            tabIndex={0}
+            className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+          >
+            <li className="hover:bg-rose-500 hover:text-white">
+              <button onClick={() => handlerolesort("")}>All</button>
+            </li>
+            <li className="hover:bg-rose-500 hover:text-white">
+              <button onClick={() => handlerolesort("user")}>User</button>
+            </li>
+            <li className="hover:bg-rose-500 hover:text-white">
+              <button onClick={() => handlerolesort("surveyor")}>
+                Surveyor
+              </button>
+            </li>
+            <li className="hover:bg-rose-500 hover:text-white">
+              <button onClick={() => handlerolesort("Pro-User")}>
+                Pro-User
+              </button>
+            </li>
+            <li className="hover:bg-rose-500 hover:text-white">
+              <button onClick={() => handlerolesort("admin")}>Admin</button>
+            </li>
+          </ul>
         </div>
-        <ul
-          tabIndex={0}
-          className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-        >
-          <li className="hover:bg-rose-500 hover:text-white">
-            <button onClick={()=>handlerolesort('user')}>User</button>
-          </li>
-          <li className="hover:bg-rose-500 hover:text-white"> 
-            <button onClick={()=>handlerolesort('surveyor')}>Surveyor</button>
-          </li>
-          <li className="hover:bg-rose-500 hover:text-white">
-            <button onClick={()=>handlerolesort('Pro-User')}>Pro-User</button>
-          </li>
-          <li className="hover:bg-rose-500 hover:text-white">
-            <button onClick={()=>handlerolesort('admin')}>Admin</button>
-          </li>
-        </ul>
-      </div>
       </div>
       <div className="overflow-x-auto">
         <table className="table">
