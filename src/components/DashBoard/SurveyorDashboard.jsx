@@ -5,7 +5,7 @@ import CreateForm from "./Surveyor/CreateForm";
 import SurveyorManage from "./Surveyor/SurveyorManage";
 
 const SurveyorDashboard = () => {
-  const [activeSection, setActiveSection] = useState("Surveys manage");
+  const [activeSection, setActiveSection] = useState("Survey manage");
 
   const renderContent = () => {
     switch (activeSection) {

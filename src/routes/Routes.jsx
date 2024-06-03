@@ -13,6 +13,9 @@ import SurveyorDetails from "../components/DashBoard/Surveyor/SurveyorDetails";
 import UserDashBoard from "../components/DashBoard/User/UserDashBoard";
 import AdminDashboard from "../components/DashBoard/AdminDashboard.jsx/AdminDashboard";
 import SurveyForm from "../components/DashBoard/User/SurveyForm";
+import Pricing from "../pages/Pricing";
+import AdminRoute from "../Privet/AdminRoute";
+import SurveyorRoute from "../Privet/SurveyorRoute";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +34,14 @@ const router = createBrowserRouter([
       {
         path: "/singup",
         element: <Register />,
+      },
+      {
+        path: "/pricing",
+        element: (
+          <PrivetRoute>
+            <Pricing />
+          </PrivetRoute>
+        ),
       },
       {
         path: "/surveys",
@@ -55,16 +66,32 @@ const router = createBrowserRouter([
         element: <UserDashBoard />,
       },
       {
+        path: "Pro-User",
+        element: <UserDashBoard />,
+      },
+      {
         path: "user/survey/:id",
         element: <SurveyForm />,
       },
       {
+        path: "Pro-User/survey/:id",
+        element: <SurveyForm />,
+      },
+      {
         path: "admin",
-        element: <AdminDashboard />,
+        element: (
+          <AdminRoute>
+            <AdminDashboard />
+          </AdminRoute>
+        ),
       },
       {
         path: "surveyor",
-        element: <SurveyorDashboard />,
+        element: (
+          <SurveyorRoute>
+            <SurveyorDashboard />
+          </SurveyorRoute>
+        ),
       },
       {
         path: "surveyor/update/:id",

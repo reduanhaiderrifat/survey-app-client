@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../hooks/useAuth";
-import usePublic from "../../../hooks/usePublic";
-import { Link } from "react-router-dom";
+import { Link, } from "react-router-dom";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 const SurveyorManage = () => {
   const { user } = useAuth();
-  const axiosPublic = usePublic();
+  const axiosSecure = useAxiosSecure();
   const { data: surveys = [] } = useQuery({
     queryKey: ["survey", user?.uid],
     queryFn: async () => {
-      const { data } = await axiosPublic.get(`/survey/${user?.uid}`);
+      const { data } = await axiosSecure.get(`/survey/${user?.uid}`);
       return data;
     },
   });
@@ -36,7 +36,7 @@ const SurveyorManage = () => {
                 <td>{survey?.deadline}</td>
                 <td>
                   <Link
-                    to={`details/${survey._id}`}
+                  to={`details/${survey?._id}`}
                     className="px-2 py-1  rounded-lg text-white bg-rose-500 active:scale-95"
                   >
                     Details

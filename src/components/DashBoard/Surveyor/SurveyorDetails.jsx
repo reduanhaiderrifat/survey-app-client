@@ -1,46 +1,71 @@
 import { useQuery } from "@tanstack/react-query";
-import usePublic from "../../../hooks/usePublic";
+
 import { useNavigate, useParams } from "react-router-dom";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { IoArrowBack } from "react-icons/io5";
 
 const SurveyorDetails = () => {
-  const axiosPublic = usePublic();
+  const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const { id } = useParams();
-  const { data: survey = {} } = useQuery({
-    queryKey: ["surveyUpdate", id],
+  console.log(id);
+  const { data: matchIds = [], isLoading } = useQuery({
+    queryKey: ["ids", id],
+    enabled: !!id,
     queryFn: async () => {
-      const { data } = await axiosPublic.get(`/surveyUpdate/${id}`);
+      const { data } = await axiosSecure.get(`/ids/${id}`);
       return data;
     },
   });
-  console.log(survey);
+  console.log(matchIds);
   const handleBack = () => {
     navigate(-1);
   };
+  if (isLoading) return "loading";
   return (
     <div className="">
       <button
         onClick={handleBack}
-        className="mt-4 ml-7 bg-rose-500  px-3 py-1 rounded-2xl text-white"
+        className="my-3 ml-7  bg-rose-500  px-3 py-1 rounded-2xl text-white"
       >
-        Back
+        <span className="flex items-center gap-1">
+          <IoArrowBack /> Back
+        </span>
       </button>
-      <div className="flex justify-center items-center min-h-[calc(100vh-242px)]">
-        <div className="space-y-4 border-2 p-4 rounded-lg">
-            <p className="bg-rose-500  px-3 py-1 rounded-2xl text-white">Create Time: {survey?.timestamp?.split('T')[0]}</p>
-          <h1 className="text-4xl font-bold">{survey?.category}</h1>
-          <h1 className="text-2xl font-medium">Title: {survey?.title}:</h1>
-          <p className="text-lg">{survey?.description}?</p>
-          <div className="flex items-center justify-between mt-3">
-            <h1 className="bg-rose-500  px-3 py-1 rounded-2xl text-white">
-              Deadline : {survey?.deadline}
-            </h1>
-            <h3 className="bg-rose-500  px-3 py-1 rounded-2xl text-white"> {survey?.status}</h3>
-            <h1 className="bg-rose-500  px-3 py-1 rounded-2xl text-white">
-              Vote: {survey?.options?.vote}
-            </h1>
-          </div>
-        </div>
+      <h2 className="text-center uppercase font-bold text-2xl">
+        individual survey <span className="text-rose-500">responses</span>
+      </h2>
+      <div className="overflow-x-auto">
+        <table className="table table-zebra">
+          {/* head */}
+          <thead className="text-xl">
+            <tr>
+              <th>Serial No</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Vote</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {!matchIds || matchIds.length === 0 ? (
+              <tr className="flex items-center">
+                <th> No data available </th>
+              </tr>
+            ) : (
+              matchIds.map((info, idx) => (
+                <tr key={info._id}>
+                  <th>{idx + 1}</th>
+                  <td>{info?.name}</td>
+                  <td>{info?.email}</td>
+                  <td>
+                    {info?.vote === 1 ? "Yes" : "No"} ({info?.vote})
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );

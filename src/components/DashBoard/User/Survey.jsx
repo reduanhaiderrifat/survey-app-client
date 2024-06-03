@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import usePublic from "../../../hooks/usePublic";
+// import usePublic from "../../../hooks/usePublic";
 import { Link } from "react-router-dom";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Survey = () => {
-  const axiosPublic = usePublic();
+  const axiosSecure = useAxiosSecure();
   const { data: surveys = [] } = useQuery({
     queryKey: ["allSurvey"],
     queryFn: async () => {
-      const res = await axiosPublic.get("/allSurvey");
+      const res = await axiosSecure.get("/allSurvey");
       return res.data;
     },
   });
@@ -33,9 +34,10 @@ const Survey = () => {
                 <td>{survey?.title}</td>
                 <td>{survey?.category}</td>
                 <td>
-                  <Link 
-                  to={`survey/${survey._id}`}
-                  className="bg-rose-500 text-white hover:bg-rose-500 active:scale-95 px-3 py-1 rounded-lg">
+                  <Link
+                    to={`survey/${survey._id}`}
+                    className="bg-rose-500 text-white hover:bg-rose-500 active:scale-95 px-3 py-1 rounded-lg"
+                  >
                     Participate
                   </Link>
                 </td>

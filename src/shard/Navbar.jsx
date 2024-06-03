@@ -22,9 +22,6 @@ const Navbar = () => {
       <li>
         <NavLink to="/pricing">Pricing</NavLink>
       </li>
-      <li>
-        <NavLink to="/surveyDetails">Survey Details</NavLink>
-      </li>
     </>
   );
   useEffect(() => {
@@ -54,19 +51,19 @@ const Navbar = () => {
     setDropdownOpen((prev) => !prev);
   };
 
-  const { data: formars = {},error } = useQuery({
+  const { data: formars = {}, error } = useQuery({
     queryKey: ["users", user?.uid],
-    enabled: !!user?.uid, 
+    enabled: !!user?.uid,
     queryFn: async () => {
       const res = await axiosPubic.get(`/users/${user?.uid}`);
       return res.data;
     },
   });
   console.log(user?.uid);
-  if(error) {
+  if (error) {
     console.log(error);
   }
-  const roles = Array.isArray(formars) ? formars.map(f => f?.role) : [];
+  const roles = Array.isArray(formars) ? formars.map((f) => f?.role) : [];
   console.log(roles);
   return (
     <div>
