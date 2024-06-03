@@ -47,6 +47,7 @@ const Register = () => {
         if (currentuser) {
           const userData = {
             email: currentuser?.email ||"email not add",
+            name:username,
             uid:currentuser?.uid,
             role: "user",
           };
@@ -84,6 +85,7 @@ const Register = () => {
         if (currentuser) {
           const userData = {
             email: currentuser?.email ||"email not add",
+            name:currentuser?.dispalyName,
             uid:currentuser?.uid,
             role: "user",
           };
@@ -115,6 +117,7 @@ const Register = () => {
         if (currentuser) {
           const userData = {
             email: currentuser?.email ||"email not add",
+            name:currentuser?.dispalyName,
             uid:currentuser?.uid,
             role: "user",
           };

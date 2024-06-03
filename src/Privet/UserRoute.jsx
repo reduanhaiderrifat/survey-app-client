@@ -3,13 +3,13 @@ import useAuth from "../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import usePublic from "../hooks/usePublic";
 
-const AdminRoute = ({ children }) => {
+const UserRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const axiosSecure = usePublic();
 
 
   const { data: userData={}, isLoading: queryLoading } = useQuery({
-    queryKey: ['admin', user?.uid],
+    queryKey: ['user', user?.uid],
     queryFn: async () => {
       if (!user) return null;
       const { data } = await axiosSecure.get(`/user/${user?.uid}`);
@@ -22,7 +22,7 @@ const AdminRoute = ({ children }) => {
     return "loading";
   }
 
-  if (userData?.role === 'admin') {
+  if (userData?.role === 'user') {
     return children;
   }
 
@@ -31,4 +31,4 @@ const AdminRoute = ({ children }) => {
   );
 };
 
-export default AdminRoute;
+export default UserRoute;

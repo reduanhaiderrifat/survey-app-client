@@ -16,6 +16,8 @@ import SurveyForm from "../components/DashBoard/User/SurveyForm";
 import Pricing from "../pages/Pricing";
 import AdminRoute from "../Privet/AdminRoute";
 import SurveyorRoute from "../Privet/SurveyorRoute";
+import UserRoute from "../Privet/UserRoute";
+import ProUserRoute from "../Privet/ProUserRoute";
 
 const router = createBrowserRouter([
   {
@@ -63,11 +65,20 @@ const router = createBrowserRouter([
     children: [
       {
         path: "user",
-        element: <UserDashBoard />,
+        element: (
+          <UserRoute>
+            <UserDashBoard />
+          </UserRoute>
+        ),
       },
       {
         path: "Pro-User",
-        element: <UserDashBoard />,
+        element: (
+          <ProUserRoute>
+            {" "}
+            <UserDashBoard />
+          </ProUserRoute>
+        ),
       },
       {
         path: "user/survey/:id",

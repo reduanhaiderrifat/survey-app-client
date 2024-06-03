@@ -54,6 +54,7 @@ const Login = () => {
           const userData = {
             email: currentuser?.email || "email not add",
             uid:currentuser?.uid,
+            name:currentuser?.dispalyName,
             role: "user",
           };
           axiosPubic
@@ -84,6 +85,7 @@ const Login = () => {
         if (currentuser) {
           const userData = {
             email: currentuser?.email || "email not add",
+            name:currentuser?.dispalyName,
             uid: currentuser?.uid,
             role: "user",
           };

@@ -12,7 +12,7 @@ const ManageUser = () => {
   const { data: users = [], refetch } = useQuery({
     queryKey: ["users", sortRole],
     queryFn: async () => {
-      const response = await axiosSecure.get(`/adminUsers?status=${sortRole}`);
+      const response = await axiosSecure.get(`/adminUsers?role=${sortRole}`);
       return response.data;
     },
   });
@@ -97,23 +97,7 @@ const ManageUser = () => {
             {/* row 1 */}
             {users?.map((user) => (
               <tr key={user._id}>
-                <td>
-                  <div className="flex items-center gap-3">
-                    <div className="avatar">
-                      <div className="mask mask-squircle w-12 h-12">
-                        <img
-                          src={
-                            user?.photo || "https://i.ibb.co/fxdn1T9/user1.png"
-                          }
-                          alt="Avatar Tailwind CSS Component"
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <div className="font-bold">{user?.name}</div>
-                    </div>
-                  </div>
-                </td>
+                <td className="font-bold">{user?.name}</td>
                 <td>
                   <span className="badge badge-ghost badge-sm">
                     {user?.email}
