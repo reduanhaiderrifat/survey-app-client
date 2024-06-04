@@ -18,6 +18,7 @@ import AdminRoute from "../Privet/AdminRoute";
 import SurveyorRoute from "../Privet/SurveyorRoute";
 import UserRoute from "../Privet/UserRoute";
 import ProUserRoute from "../Privet/ProUserRoute";
+import UserSurveyVote from "../components/DashBoard/User/UserSurveyVote";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: "/singup",
         element: <Register />,
+      },
+      {
+        path: "/uservote/:id",
+        element: <UserSurveyVote />,
       },
       {
         path: "/pricing",

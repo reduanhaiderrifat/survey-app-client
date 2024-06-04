@@ -5,10 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { FaArrowDownAZ } from "react-icons/fa6";
 import Loader from "../components/loader/Loader";
+import { FaSortAmountDownAlt } from "react-icons/fa";
 
 const Surveys = () => {
   const axiosPublic = usePublic();
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [sortByVotes, setSortByVotes] = useState(false);
   const navigate = useNavigate();
   const categories = [
     "Customer Satisfaction",
@@ -22,11 +24,9 @@ const Surveys = () => {
     refetch,
     isLoading,
   } = useQuery({
-    queryKey: ["surveyorsData", selectedCategory],
+    queryKey: ["surveyorsData", selectedCategory,sortByVotes],
     queryFn: async () => {
-      const queryParam = selectedCategory
-        ? `?category=${selectedCategory}`
-        : "";
+      const queryParam = `?category=${selectedCategory}&sortByVotes=${sortByVotes}`;
       const res = await axiosPublic.get(`/surveyorsData${queryParam}`);
       return res.data;
     },
@@ -34,6 +34,10 @@ const Surveys = () => {
   console.log(surveys);
   const handleCategorySelect = async (category) => {
     setSelectedCategory(category);
+    await refetch();
+  };
+  const handleSortByVotes = async () => {
+    setSortByVotes((prev) => !prev);
     await refetch();
   };
   const handleParticipateClick = (survey) => {
@@ -47,7 +51,7 @@ const Surveys = () => {
         text: "The deadline for this survey has passed.",
       });
     } else {
-      navigate(`survey/${survey._id}`);
+      navigate(`/uservote/${survey._id}`);
     }
   };
   if (isLoading) return <Loader />;
@@ -58,7 +62,7 @@ const Surveys = () => {
         <div className="flex justify-center my-4">
           <details className="dropdown ">
             <summary className="m-1 btn bg-rose-500 hover:text-rose-500 text-white hover:bg-transparent hover:border-rose-500">
-              Sort By Category <FaArrowDownAZ />
+              Filter By Category <FaArrowDownAZ />
             </summary>
             <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
               <li key="all">
@@ -73,6 +77,12 @@ const Surveys = () => {
               ))}
             </ul>
           </details>
+          <button
+            className="m-1 btn bg-blue-500 hover:text-blue-500 text-white hover:bg-transparent hover:border-blue-500"
+            onClick={handleSortByVotes}
+          >
+            Sort By Votes <FaSortAmountDownAlt />
+          </button>
         </div>
 
         <div className="overflow-x-auto">
