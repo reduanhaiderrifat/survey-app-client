@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
 import { useNavigate, useParams } from "react-router-dom";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { IoArrowBack } from "react-icons/io5";
@@ -35,38 +36,51 @@ const SurveyorDetails = () => {
       <h2 className="text-center uppercase font-bold text-2xl">
         individual survey <span className="text-rose-500">responses</span>
       </h2>
-      <div className="overflow-x-auto">
-        <table className="table table-zebra">
-          {/* head */}
-          <thead className="text-xl">
-            <tr>
-              <th>Serial No</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Vote</th>
-            </tr>
-          </thead>
+      <Tabs>
+        <TabList>
+          <Tab>Table</Tab>
+          <Tab>Chart</Tab>
+        </TabList>
 
-          <tbody>
-            {!matchIds || matchIds.length === 0 ? (
-              <tr className="flex items-center">
-                <th> No data available </th>
-              </tr>
-            ) : (
-              matchIds.map((info, idx) => (
-                <tr key={info._id}>
-                  <th>{idx + 1}</th>
-                  <td>{info?.name}</td>
-                  <td>{info?.email}</td>
-                  <td>
-                    {info?.vote === 1 ? "Yes" : "No"} ({info?.vote})
-                  </td>
+        <TabPanel>
+          <div className="overflow-x-auto">
+            <table className="table table-zebra">
+              {/* head */}
+              <thead className="text-xl">
+                <tr>
+                  <th>Serial No</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Vote</th>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+              </thead>
+
+              <tbody>
+                {!matchIds || matchIds.length === 0 ? (
+                  <tr className="flex items-center">
+                    <th> No data available </th>
+                  </tr>
+                ) : (
+                  matchIds.map((info, idx) => (
+                    <tr key={info._id}>
+                      <th>{idx + 1}</th>
+                      <td>{info?.name}</td>
+                      <td>{info?.email}</td>
+                      <td>
+                        Yes({info?.answers?.yesAnswers.length}) NO(
+                        {info?.answers?.noAnswers.length})
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </TabPanel>
+        <TabPanel>
+          <h2>Any content 2</h2>
+        </TabPanel>
+      </Tabs>
     </div>
   );
 };

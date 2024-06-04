@@ -1,5 +1,6 @@
 import Hero from "../components/Home/Hero";
 import MostVote from "../components/Home/MostVote";
+import RecentSurvey from "../components/Home/RecentSurvey";
 
 
 const Home = () => {
@@ -7,6 +8,7 @@ const Home = () => {
     <div>
       <Hero />
       <MostVote />
+      <RecentSurvey/>
     </div>
   );
 };

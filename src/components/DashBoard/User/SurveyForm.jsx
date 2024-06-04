@@ -15,7 +15,6 @@ const SurveyForm = () => {
   const commentRef = useRef(null);
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [count, setCount] = useState(0);
   const { id } = useParams();
   const { data: survey = {} } = useQuery({
     queryKey: ["userSurvey", id],
@@ -24,7 +23,6 @@ const SurveyForm = () => {
       return res.data;
     },
   });
-  console.log(survey);
   const { data: role = {} } = useQuery({
     queryKey: ["pro-user", user?.uid],
     queryFn: async () => {
@@ -32,36 +30,78 @@ const SurveyForm = () => {
       return res.data;
     },
   });
-  const handleOptionChange = (event) => {
+
+  const [votes, setVotes] = useState({
+    question1: null,
+    question2: null,
+    question3: null,
+  });
+
+  const handleOptionChange = (event, question) => {
     const value = event.target.value;
-    if (value === "Yes") {
-      setCount(1);
-    } else if (value === "No") {
-      setCount(-1);
-    }
+    setVotes((prevVotes) => ({
+      ...prevVotes,
+      [question]: value,
+    }));
   };
+
+  const calculateVoteCount = () => {
+    return Object.values(votes).reduce((acc, vote) => {
+      if (vote === "Yes") {
+        return acc + 1;
+      } else if (vote === "No") {
+        return acc - 1;
+      }
+      return acc;
+    }, 0);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (count === 0) {
-      return toast.error("Please! Give your answer");
+
+    const values = Object.values(votes);
+    if (values.includes(null)) {
+      return toast.error("Please answer all questions");
     }
+//----------------
+const answers = {
+  yesAnswers: [],
+  noAnswers: [],
+};
+
+for (const [question, answer] of Object.entries(votes)) {
+  if (answer === "Yes") {
+    answers.yesAnswers.push(question);
+  } else if (answer === "No") {
+    answers.noAnswers.push(question);
+  }
+}
+//----------------
+    const count = calculateVoteCount();
+    console.log(count);
     const { data } = await axiosPublic.patch(`/userVote/${survey?._id}`, {
       vote: count,
     });
-    console.log(data);
+
     if (data.modifiedCount > 0) {
-      toast.success("update successfully");
+      toast.success("Update successful");
     }
-    //post user survey
+
     const userSurvey = {
       survey,
-      voteId:survey?._id,
+      voteId: survey?._id,
       email: user?.email,
+      uid: user?.uid,
       name: user?.displayName,
       vote: count,
+      answers:answers,
     };
-    const res = await axiosPublic.post("/userSurveyPost", userSurvey);
-    console.log(res.data);
+
+    const res = await axiosPublic.post(
+      `/userSurveyPost/${user?.uid}`,
+      userSurvey
+    );
+
     if (res.data.insertedId) {
       Swal.fire({
         position: "top-center",
@@ -72,10 +112,11 @@ const SurveyForm = () => {
       });
     }
   };
+
   const handleReport = async (e) => {
     e.preventDefault();
     const report = e.target.report.value;
-    const repotData = {
+    const reportData = {
       report,
       email: user?.email,
       name: user?.displayName,
@@ -83,12 +124,12 @@ const SurveyForm = () => {
       uid: user?.uid,
     };
 
-    const { data } = await axiosPublic.post("/report", repotData);
+    const { data } = await axiosPublic.post("/report", reportData);
     if (data.insertedId) {
       Swal.fire({
         position: "top-center",
         icon: "success",
-        title: "Your report is post",
+        title: "Your report is posted",
         showConfirmButton: false,
         timer: 1500,
       });
@@ -97,6 +138,7 @@ const SurveyForm = () => {
       }
     }
   };
+
   const handleComment = async (e) => {
     e.preventDefault();
     const comment = e.target.comment.value;
@@ -113,7 +155,7 @@ const SurveyForm = () => {
       Swal.fire({
         position: "top-center",
         icon: "success",
-        title: "Your comment is post",
+        title: "Your comment is posted",
         showConfirmButton: false,
         timer: 1500,
       });
@@ -122,18 +164,20 @@ const SurveyForm = () => {
       }
     }
   };
+
   const handleBack = () => {
     navigate(-1);
   };
+
   return (
-    <div className="bg-gray-100  flex items-center justify-center min-h-[calc(100vh-200px)]">
-      <div className=" p-8 rounded-lg bg-[#F0EBF8] shadow-lg w-full max-w-md">
+    <div className="bg-gray-100 flex items-center justify-center min-h-[calc(100vh-200px)]">
+      <div className="p-8 rounded-lg bg-[#F0EBF8] shadow-lg w-full max-w-md">
         <div className="flex items-center justify-between">
           <button
             onClick={handleBack}
             className="flex items-center gap-2 text-lg font-semibold"
           >
-            <IoMdArrowRoundBack size={30} /> back
+            <IoMdArrowRoundBack size={30} /> Back
           </button>
           <div className="flex items-center gap-5">
             <div className="tooltip tooltip-left" data-tip="Comment">
@@ -142,8 +186,7 @@ const SurveyForm = () => {
                   <FaTelegramPlane size={30} />
                 </button>
               ) : (
-                <Link to='/pricing'>
-                  {" "}
+                <Link to="/pricing">
                   <FaTelegramPlane size={30} />
                 </Link>
               )}
@@ -156,7 +199,7 @@ const SurveyForm = () => {
               <div className="modal-box">
                 <form onSubmit={handleComment}>
                   <textarea
-                    placeholder="text your comment here..."
+                    placeholder="Text your comment here..."
                     name="comment"
                     required
                     className="textarea textarea-bordered textarea-lg mt-3 w-full"
@@ -189,7 +232,7 @@ const SurveyForm = () => {
             <div className="modal-box">
               <form onSubmit={handleReport}>
                 <textarea
-                  placeholder="text your report here..."
+                  placeholder="Text your report here..."
                   name="report"
                   required
                   className="textarea textarea-bordered textarea-lg mt-3 w-full"
@@ -199,7 +242,6 @@ const SurveyForm = () => {
 
               <div className="modal-action">
                 <form method="dialog">
-                  {/* if there is a button in form, it will close the modal */}
                   <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-0">
                     ✕
                   </button>
@@ -214,22 +256,23 @@ const SurveyForm = () => {
               Please Answer the Question
             </h1>
             <h1 className="text-xl font-bold mb-6 text-center text-rose-500">
-              ( {survey?.category} )
+              ({survey?.category})
             </h1>
 
             <h2 className="text-3xl font-bold mb-4 text-gray-700">
-              {survey?.title}
+              .{survey?.title}
             </h2>
-            <p className="text-lg mb-6  text-gray-600">
-              {survey?.description}?
+            <p className="text-lg mb-6 text-gray-600">
+              {" "}
+              <strong> Q.</strong> {survey?.description}?
             </p>
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <input
                   type="radio"
-                  name="radio-3"
+                  name="question1"
                   value="Yes"
-                  onChange={handleOptionChange}
+                  onChange={(e) => handleOptionChange(e, "question1")}
                   className="radio radio-secondary"
                 />{" "}
                 <span>{survey?.options?.Yes}</span>
@@ -237,15 +280,73 @@ const SurveyForm = () => {
               <div className="flex items-center gap-3">
                 <input
                   type="radio"
-                  name="radio-3"
+                  name="question1"
                   value="No"
-                  onChange={handleOptionChange}
+                  onChange={(e) => handleOptionChange(e, "question1")}
+                  className="radio radio-secondary"
+                />{" "}
+                <span>{survey?.options?.No}</span>
+              </div>
+            </div>
+            <h2 className="text-3xl font-bold mb-4 mt-7 text-gray-700">
+              .{survey?.title1}
+            </h2>
+            <p className="text-lg mb-6 text-gray-600">
+              <strong> Q. </strong>
+              {survey?.description1}?
+            </p>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <input
+                  type="radio"
+                  name="question2"
+                  value="Yes"
+                  onChange={(e) => handleOptionChange(e, "question2")}
+                  className="radio radio-secondary"
+                />{" "}
+                <span>{survey?.options?.Yes}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <input
+                  type="radio"
+                  name="question2"
+                  value="No"
+                  onChange={(e) => handleOptionChange(e, "question2")}
+                  className="radio radio-secondary"
+                />{" "}
+                <span>{survey?.options?.No}</span>
+              </div>
+            </div>
+            <h2 className="text-3xl font-bold mb-4 mt-5 text-gray-700">
+              .{survey?.title2}
+            </h2>
+            <p className="text-lg mb-6 text-gray-600">
+              <strong> Q. </strong>
+              {survey?.description2}?
+            </p>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <input
+                  type="radio"
+                  name="question3"
+                  value="Yes"
+                  onChange={(e) => handleOptionChange(e, "question3")}
+                  className="radio radio-secondary"
+                />{" "}
+                <span>{survey?.options?.Yes}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <input
+                  type="radio"
+                  name="question3"
+                  value="No"
+                  onChange={(e) => handleOptionChange(e, "question3")}
                   className="radio radio-secondary"
                 />{" "}
                 <span>{survey?.options?.No}</span>
               </div>
               <div className="flex justify-end w-full">
-                <button className="bg-rose-500 hover:bg-rose-500 text-white font-semibold btn ">
+                <button className="bg-rose-500 hover:bg-rose-500 text-white font-semibold btn">
                   Submit
                 </button>
               </div>

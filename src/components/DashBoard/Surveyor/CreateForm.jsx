@@ -22,11 +22,19 @@ const CreateForm = () => {
     const form = e.target;
     const title = form.title.value;
     const description = form.description.value;
+    const title1 = form.title1.value;
+    const description1 = form.description1.value;
+    const title2 = form.title2.value;
+    const description2 = form.description2.value;
     const category = form.category.value;
     const vote = parseInt(0);
     const surveyData = {
       title,
       description,
+      title1,
+      description1,
+      title2,
+      description2,
       category,
       deadline,
       options: { Yes, No, vote },
@@ -56,7 +64,7 @@ const CreateForm = () => {
       <h2 className="text-2xl font-bold mb-6">Create New Survey</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-gray-700">Title</label>
+          <label className="block text-gray-700">Title-1</label>
           <input
             type="text"
             name="title"
@@ -65,9 +73,43 @@ const CreateForm = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700">Description</label>
+          <label className="block text-gray-700">Description-1</label>
           <textarea
             name="description"
+            className="w-full mt-1 p-2 border border-gray-300 rounded"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Title-2</label>
+          <input
+            type="text"
+            name="title1"
+            className="w-full mt-1 p-2 border border-gray-300 rounded"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Description-2</label>
+          <textarea
+            name="description1"
+            className="w-full mt-1 p-2 border border-gray-300 rounded"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Title-3</label>
+          <input
+            type="text"
+            name="title2"
+            className="w-full mt-1 p-2 border border-gray-300 rounded"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Description-3</label>
+          <textarea
+            name="description2"
             className="w-full mt-1 p-2 border border-gray-300 rounded"
             required
           />
