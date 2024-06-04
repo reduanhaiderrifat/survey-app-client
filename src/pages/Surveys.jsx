@@ -1,14 +1,16 @@
 import Swal from "sweetalert2";
 import usePublic from "../hooks/usePublic";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { FaArrowDownAZ } from "react-icons/fa6";
 import Loader from "../components/loader/Loader";
 import { FaSortAmountDownAlt } from "react-icons/fa";
+import useAuth from "../hooks/useAuth";
 
 const Surveys = () => {
   const axiosPublic = usePublic();
+  const { user } = useAuth();
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortByVotes, setSortByVotes] = useState(false);
   const navigate = useNavigate();
@@ -24,7 +26,7 @@ const Surveys = () => {
     refetch,
     isLoading,
   } = useQuery({
-    queryKey: ["surveyorsData", selectedCategory,sortByVotes],
+    queryKey: ["surveyorsData", selectedCategory, sortByVotes],
     queryFn: async () => {
       const queryParam = `?category=${selectedCategory}&sortByVotes=${sortByVotes}`;
       const res = await axiosPublic.get(`/surveyorsData${queryParam}`);
@@ -106,12 +108,25 @@ const Surveys = () => {
                   <td>{survey?.description}</td>
                   <td>{survey?.options?.vote}</td>
                   <td>
-                    <button
-                      onClick={() => handleParticipateClick(survey)}
-                      className="bg-rose-500 text-white hover:bg-rose-500 active:scale-95 px-3 py-1 rounded-lg"
-                    >
-                      Participate
-                    </button>
+                    {user?.uid ? (
+                      <>
+                        <button
+                          onClick={() => handleParticipateClick(survey)}
+                          className="bg-rose-500 text-white hover:bg-rose-500 active:scale-95 px-3 py-1 rounded-lg"
+                        >
+                          Participate
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          to="/login"
+                          className="bg-rose-500 text-white hover:bg-rose-500 active:scale-95 px-3 py-1 rounded-lg"
+                        >
+                          Participate
+                        </Link>
+                      </>
+                    )}
                   </td>
                 </tr>
               ))}
