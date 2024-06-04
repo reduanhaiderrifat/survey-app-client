@@ -288,6 +288,7 @@ const SurveyForm = () => {
                 <span>{survey?.options?.No}</span>
               </div>
             </div>
+         
             <h2 className="text-3xl font-bold mb-4 mt-7 text-gray-700">
               .{survey?.title1}
             </h2>
@@ -316,6 +317,7 @@ const SurveyForm = () => {
                 />{" "}
                 <span>{survey?.options?.No}</span>
               </div>
+          
             </div>
             <h2 className="text-3xl font-bold mb-4 mt-5 text-gray-700">
               .{survey?.title2}

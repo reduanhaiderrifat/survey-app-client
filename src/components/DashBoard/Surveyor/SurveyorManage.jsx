@@ -16,25 +16,27 @@ const SurveyorManage = () => {
   return (
     <div>
       <div className="overflow-x-auto">
-        <table className="table">
+        <table className="min-w-full bg-white">
           {/* head */}
-          <thead>
+          <thead className="bg-rose-500 text-white">
             <tr>
-              <th></th>
-              <th>Title</th>
-              <th>Category</th>
-              <th>Deadline</th>
+              <th className="py-3 px-5 text-left">#</th>
+              <th className="py-3 px-5 text-left">Title</th>
+              <th className="py-3 px-5 text-left">Category</th>
+              <th className="py-3 px-5 text-left">Deadline</th>
+              <th className="py-3 px-5 text-center">Details</th>
+              <th className="py-3 px-5 text-center">Update</th>
             </tr>
           </thead>
           <tbody>
             {/* row 1 */}
             {surveys?.map((survey, idx) => (
-              <tr key={survey._id} className="bg-base-200">
-                <th>{idx + 1}</th>
-                <td>{survey?.title}</td>
-                <td>{survey?.category}</td>
-                <td>{survey?.deadline}</td>
-                <td>
+              <tr key={survey._id} className="border-b border-gray-200">
+                <th className="py-3 px-5 border"> {idx + 1}</th>
+                <td className="py-3 px-5 border">{survey?.title}</td>
+                <td className="py-3 px-5 border">{survey?.category}</td>
+                <td className="py-3 px-5 border">{survey?.deadline}</td>
+                <td className="py-3 px-5 text-center">
                   <Link
                   to={`details/${survey?._id}`}
                     className="px-2 py-1  rounded-lg text-white bg-rose-500 active:scale-95"

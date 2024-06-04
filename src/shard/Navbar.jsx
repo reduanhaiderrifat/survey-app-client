@@ -24,14 +24,41 @@ const Navbar = () => {
   const links = (
     <>
       <li>
-        <NavLink to="/">Home</NavLink>
+        <NavLink  className="hover:bg-base-200 p-2 font-bold   hover:rounded-lg"
+          style={({ isActive, isTransiTion }) => {
+            return {
+              fontWeight: isActive ? "bold" : "",
+              color: isActive ? "#F53F5E" : "",
+              background:isActive? 'transparent':"",
+              borderBottom: isActive ? "4px solid #F53F5E" : "",
+              viewTimelineName: isTransiTion ? "silder" : "",
+            };
+          }} to="/">Home</NavLink>
       </li>
       <li>
-        <NavLink to="/surveys">Surveys</NavLink>
+        <NavLink  className="hover:bg-base-200 p-2 font-bold   hover:rounded-lg"
+          style={({ isActive, isTransiTion }) => {
+            return {
+              fontWeight: isActive ? "bold" : "",
+              color: isActive ? "#F53F5E" : "",
+              background:isActive? 'transparent':"",
+              borderBottom: isActive ? "4px solid #F53F5E" : "",
+              viewTimelineName: isTransiTion ? "silder" : "",
+            };
+          }} to="/surveys">Surveys</NavLink>
       </li>
 
       <li>
-        <NavLink to="/pricing">Pricing</NavLink>
+        <NavLink  className="hover:bg-base-200 p-2 font-bold   hover:rounded-lg"
+          style={({ isActive, isTransiTion }) => {
+            return {
+              fontWeight: isActive ? "bold" : "",
+              color: isActive ? "#F53F5E" : "",
+              background:isActive? 'transparent':"",
+              borderBottom: isActive ? "4px solid #F53F5E" : "",
+              viewTimelineName: isTransiTion ? "silder" : "",
+            };
+          }} to="/pricing">Pricing</NavLink>
       </li>
     </>
   );
@@ -85,7 +112,7 @@ const Navbar = () => {
             {dropdownOpen && (
               <ul
                 tabIndex={0}
-                className="menu  dropdown-content mt-3 space-y-3 z-50 p-2 shadow bg-base-100 rounded-box w-[400px]"
+                className="menu  dropdown-content mt-3 space-y-5 z-50 p-2 shadow bg-base-100 rounded-box w-[400px]"
               >
                 {links}
               </ul>
@@ -96,7 +123,7 @@ const Navbar = () => {
           </p>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">{links}</ul>
+          <ul className="menu menu-horizontal px-1 space-x-7">{links}</ul>
         </div>
         <div className="navbar-end space-x-2 md:space-x-5">
           <label className="cursor-pointer grid place-items-center">
