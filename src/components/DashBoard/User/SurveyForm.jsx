@@ -63,26 +63,26 @@ const SurveyForm = () => {
     if (values.includes(null)) {
       return toast.error("Please answer all questions");
     }
-//----------------
-const answers = {
-  yesAnswers: [],
-  noAnswers: [],
-};
+    //----------------
+    const answers = {
+      yesAnswers: [],
+      noAnswers: [],
+    };
 
-for (const [question, answer] of Object.entries(votes)) {
-  if (answer === "Yes") {
-    answers.yesAnswers.push(question);
-  } else if (answer === "No") {
-    answers.noAnswers.push(question);
-  }
-}
-//----------------
+    for (const [question, answer] of Object.entries(votes)) {
+      if (answer === "Yes") {
+        answers.yesAnswers.push(question);
+      } else if (answer === "No") {
+        answers.noAnswers.push(question);
+      }
+    }
+    //----------------
     const count = calculateVoteCount();
     console.log(count);
     const { data } = await axiosPublic.patch(`/userVote/${survey?._id}`, {
       vote: count,
     });
-
+    await axiosPublic.post(`/userVotePost/${survey?._id}`, answers);
     if (data.modifiedCount > 0) {
       toast.success("Update successful");
     }
@@ -94,7 +94,7 @@ for (const [question, answer] of Object.entries(votes)) {
       uid: user?.uid,
       name: user?.displayName,
       vote: count,
-      answers:answers,
+      answers: answers,
     };
 
     const res = await axiosPublic.post(

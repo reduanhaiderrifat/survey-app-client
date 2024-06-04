@@ -19,9 +19,9 @@ const RecentSurvey = () => {
       <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 ">
         {votes?.map((vote) => (
           <div key={vote._id} className="border rounded-md hover:shadow-2xl">
-            <h1 className="text-center">
+            <h1 className="text-center mb-3">
               <strong>category:</strong>{" "}
-              <span className="font-semibold">{vote?.category}</span>
+              <span className="font-semibold ">{vote?.category}</span>
             </h1>
             <p className="bg-rose-500 text-center text-white px-3 rounded-full">
                   {new Date(vote?.timestamp).toLocaleString()}
