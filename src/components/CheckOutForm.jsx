@@ -4,13 +4,16 @@ import toast from "react-hot-toast";
 import usePublic from "../hooks/usePublic";
 import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const CheckOutForm = () => {
   const stripe = useStripe();
   const [clientSecret, setClientSecret] = useState("");
   const elements = useElements();
   const { user } = useAuth();
-  const axiosSecure = usePublic();
+  const axiosSecure = useAxiosSecure();
+  const axiosPublic = usePublic();
   const price = 50;
 
   const getData = useCallback(async () => {
@@ -19,7 +22,7 @@ const CheckOutForm = () => {
     });
     console.log(data.clientSecret);
     setClientSecret(data.clientSecret);
-  }, []);
+  }, [axiosSecure]);
   useEffect(() => {
     getData();
   }, [getData]);
@@ -94,7 +97,14 @@ const CheckOutForm = () => {
       }
     }
   };
-
+  const { data: perfomer = {} } = useQuery({
+    queryKey: ["users", user?.uid],
+    queryFn: async () => {
+      const res = await axiosPublic.get(`/users/${user?.uid}`);
+      return res.data;
+    },
+  });
+  console.log(perfomer);
   return (
     <form onSubmit={handleSubmit}>
       <CardElement
@@ -115,10 +125,14 @@ const CheckOutForm = () => {
       />
       <button
         type="submit"
-        disabled={!stripe || !clientSecret}
+        disabled={!stripe || !clientSecret || perfomer?.role === "admin"}
         className="w-full btn bg-rose-500 text-white mt-9 hover:bg-rose-500"
       >
-        Pay
+        {perfomer?.role === "admin" ? (
+          <span style={{ color: "black" }}>Admin can't pay for role will change</span>
+        ) : (
+          <span style={{ color: "white" }}>Pay</span>
+        )}
       </button>
     </form>
   );

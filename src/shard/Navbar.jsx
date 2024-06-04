@@ -5,12 +5,22 @@ import { FaBars } from "react-icons/fa";
 import toast from "react-hot-toast";
 import usePublic from "../hooks/usePublic";
 import { useQuery } from "@tanstack/react-query";
+import Loader from "../components/loader/Loader";
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
   const [theme, setTheme] = useState("light");
   const axiosPubic = usePublic();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const { data: formars = {}, error,isLoading } = useQuery({
+    queryKey: ["users", user?.uid],
+    enabled: !!user?.uid,
+    queryFn: async () => {
+      const res = await axiosPubic.get(`/users/${user?.uid}`);
+      return res.data;
+    },
+  });
   const links = (
     <>
       <li>
@@ -19,6 +29,7 @@ const Navbar = () => {
       <li>
         <NavLink to="/surveys">Surveys</NavLink>
       </li>
+
       <li>
         <NavLink to="/pricing">Pricing</NavLink>
       </li>
@@ -51,20 +62,13 @@ const Navbar = () => {
     setDropdownOpen((prev) => !prev);
   };
 
-  const { data: formars = {}, error } = useQuery({
-    queryKey: ["users", user?.uid],
-    enabled: !!user?.uid,
-    queryFn: async () => {
-      const res = await axiosPubic.get(`/users/${user?.uid}`);
-      return res.data;
-    },
-  });
   console.log(user?.uid);
   if (error) {
     console.log(error);
   }
-  const roles = Array.isArray(formars) ? formars.map((f) => f?.role) : [];
-  console.log(roles);
+  if(isLoading){
+    return <Loader/>
+  }
   return (
     <div>
       <div className="navbar bg-base-100 fixed z-50 top-0 shadow-lg">
@@ -147,7 +151,7 @@ const Navbar = () => {
               {user ? (
                 <>
                   <Link
-                    to={`/dashboard/${roles}`}
+                    to={`/dashboard/${formars?.role}`}
                     className="btn mb-2 text-rose-500 border-rose-500 bg-transparent hover:bg-rose-500 hover:text-white"
                   >
                     Dashboard
