@@ -2,18 +2,24 @@ import Swal from "sweetalert2";
 import usePublic from "../hooks/usePublic";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 const Surveys = () => {
   const axiosPublic = usePublic();
+  const [selectedCategory, setSelectedCategory] = useState("");
   const navigate = useNavigate();
-  const { data: surveys = [] } = useQuery({
+  const { data: surveys = [], refetch } = useQuery({
     queryKey: ["surveyorsData"],
     queryFn: async () => {
-      const res = await axiosPublic.get("/surveyorsData");
+      const res = await axiosPublic.get(`/surveyorsData?category=${selectedCategory}`);
       return res.data;
     },
   });
   console.log(surveys);
+  const handleCategorySelect = async(category) => {
+    setSelectedCategory(category);
+   await refetch();
+  };
   const handleParticipateClick = (survey) => {
     const currentDate = new Date();
     const deadlineDate = new Date(survey?.deadline);
@@ -38,15 +44,20 @@ const Surveys = () => {
   return (
     <div>
       <div>
-        <details className="dropdown">
-          <summary className="m-1 btn">open or close</summary>
-          <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
-         <li>jjjjjjjjjj</li>
-         <li>jjjjjjjjjj</li>
-         <li>jjjjjjjjjj</li>
-         <li>jjjjjjjjjj</li>
-          </ul>
-        </details>
+        <div className="flex justify-center my-4">
+          <details className="dropdown ">
+            <summary className="m-1 btn">Sort By Category</summary>
+            <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+              {categories?.map((cat, idx) => (
+                <li key={idx}>
+                  <button onClick={() => handleCategorySelect(cat)}>
+                    {cat}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </details>
+        </div>
 
         <div className="overflow-x-auto">
           <table className="table">
