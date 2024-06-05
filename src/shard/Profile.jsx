@@ -3,8 +3,10 @@ import useAuth from "../hooks/useAuth";
 import usePublic from "../hooks/usePublic";
 import wave from "../../public/wave.svg";
 import { useRef } from "react";
+import { imageUpload } from "../utils";
+import toast from "react-hot-toast";
 const Profile = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const modalRef = useRef();
   const axiosPublic = usePublic();
   const { data: former = {} } = useQuery({
@@ -26,6 +28,18 @@ const Profile = () => {
     }
   };
   console.log(user);
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const username = e.target.name.value;
+    const image = e.target.image.files[0];
+    const formData = new FormData();
+    formData.append("image", image);
+    const imageUrl = await imageUpload(image);
+    await updateUser(username, imageUrl).then(() => {
+      toast.success('Profile update successfully')
+      closeModal();
+    });
+  };
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="bg-white shadow-lg rounded-2xl w-3/5">
@@ -74,10 +88,39 @@ const Profile = () => {
                 className="modal modal-bottom sm:modal-middle"
               >
                 <div className="modal-box">
-                  <h3 className="font-bold text-lg">Hello!</h3>
-                  <p className="py-4">
-                    Press ESC key or click the button below to close
-                  </p>
+                  <h3 className="font-bold text-lg">Update Profile</h3>
+                  <form onSubmit={handleFormSubmit} className="py-4">
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                      />
+                    </div>
+                    <div className="mb-4">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Profile Image
+                      </label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        name="image"
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                      />
+                    </div>
+                    <div className="modal-action">
+                      <button
+                        onClick={closeModal}
+                        type="submit"
+                        className="btn bg-blue-500 text-white"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </form>
                   <div className="modal-action">
                     <button
                       onClick={closeModal}
