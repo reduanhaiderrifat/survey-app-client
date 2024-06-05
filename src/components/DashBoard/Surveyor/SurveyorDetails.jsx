@@ -95,14 +95,14 @@ const SurveyorDetails = () => {
 
         <TabPanel>
           <div className="overflow-x-auto">
-            <table className="table table-zebra">
+            <table  className="table-auto w-full border-collapse border  border-gray-200">
               {/* head */}
-              <thead className="text-xl">
+              <thead className="bg-rose-500 text-white">
                 <tr>
-                  <th>Serial No</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Vote</th>
+                  <th className="border border-gray-200 p-2">Serial No</th>
+                  <th className="border border-gray-200 p-2">Name</th>
+                  <th className="border border-gray-200 p-2">Email</th>
+                  <th className="border border-gray-200 p-2">Vote</th>
                 </tr>
               </thead>
 
@@ -113,11 +113,11 @@ const SurveyorDetails = () => {
                   </tr>
                 ) : (
                   matchIds.map((info, idx) => (
-                    <tr key={info._id}>
-                      <th>{idx + 1}</th>
-                      <td>{info?.name}</td>
-                      <td>{info?.email}</td>
-                      <td>
+                    <tr key={info._id} className="hover:bg-gray-50">
+                      <th className="border border-gray-200 p-2 text-center">{idx + 1}</th>
+                      <td className="border border-gray-200 p-2">{info?.name}</td>
+                      <td className="border border-gray-200 p-2">{info?.email}</td>
+                      <td className="border border-gray-200 p-2">
                         Yes({info?.answers?.yesAnswers.length}) NO(
                         {info?.answers?.noAnswers.length})
                       </td>
@@ -130,8 +130,8 @@ const SurveyorDetails = () => {
         </TabPanel>
         <TabPanel>
           <div className="flex  flex-col items-center">
-            <p className="text-2xl font-bold mb-2">Total Yes Answers: {totalYesLength}</p>
-            <p className="text-2xl font-bold ">Total No Answers: {totalNoLength}</p>
+            <p className="text-2xl font-bold mb-2">Total <span className="text-rose-500">Yes</span> Answers: {totalYesLength}</p>
+            <p className="text-2xl font-bold ">Total <span className="text-rose-500">No</span> Answers: {totalNoLength}</p>
          
         
             <PieChart width={400} height={400}>

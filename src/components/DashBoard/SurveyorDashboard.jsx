@@ -3,6 +3,7 @@ import { FaBars, FaUserGraduate } from "react-icons/fa";
 import { LuLogOut } from "react-icons/lu";
 import CreateForm from "./Surveyor/CreateForm";
 import SurveyorManage from "./Surveyor/SurveyorManage";
+import Profile from "../../shard/Profile";
 
 const SurveyorDashboard = () => {
   const [activeSection, setActiveSection] = useState("Survey manage");
@@ -14,7 +15,7 @@ const SurveyorDashboard = () => {
       case "Survey create":
         return <CreateForm />;
       case "profile":
-        return <div>Profile</div>;
+        return <Profile/>;
       default:
         return <SurveyorManage />;
     }
