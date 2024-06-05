@@ -40,7 +40,7 @@ const AdminPayment = () => {
                 <td className="border border-gray-200 p-2">{pay.email}</td>
                 <td className="border border-gray-200 p-2">$ {pay.price}</td>
                 <td className="border border-gray-200 p-2">
-                  {new Date(pay.date).toLocaleDateString()}
+                  {new Date(pay.date).toLocaleString()}
                 </td>
               </tr>
             ))}

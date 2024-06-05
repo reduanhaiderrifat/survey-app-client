@@ -2,18 +2,21 @@ import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { FaBars } from "react-icons/fa";
-import toast from "react-hot-toast";
 import usePublic from "../hooks/usePublic";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "../components/loader/Loader";
 
 const Navbar = () => {
-  const { user, logOut } = useAuth();
+  const { user } = useAuth();
   const [theme, setTheme] = useState("light");
   const axiosPubic = usePublic();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const { data: formars = {}, error,isLoading } = useQuery({
+  const {
+    data: formars = {},
+    error,
+    isLoading,
+  } = useQuery({
     queryKey: ["users", user?.uid],
     enabled: !!user?.uid,
     queryFn: async () => {
@@ -24,41 +27,56 @@ const Navbar = () => {
   const links = (
     <>
       <li>
-        <NavLink  className="hover:bg-base-200 p-2 font-bold   hover:rounded-lg"
+        <NavLink
+          className="hover:bg-base-200 p-2 font-bold   hover:rounded-lg"
           style={({ isActive, isTransiTion }) => {
             return {
               fontWeight: isActive ? "bold" : "",
               color: isActive ? "#F53F5E" : "",
-              background:isActive? 'transparent':"",
+              background: isActive ? "transparent" : "",
               borderBottom: isActive ? "4px solid #F53F5E" : "",
               viewTimelineName: isTransiTion ? "silder" : "",
             };
-          }} to="/">Home</NavLink>
+          }}
+          to="/"
+        >
+          Home
+        </NavLink>
       </li>
       <li>
-        <NavLink  className="hover:bg-base-200 p-2 font-bold   hover:rounded-lg"
+        <NavLink
+          className="hover:bg-base-200 p-2 font-bold   hover:rounded-lg"
           style={({ isActive, isTransiTion }) => {
             return {
               fontWeight: isActive ? "bold" : "",
               color: isActive ? "#F53F5E" : "",
-              background:isActive? 'transparent':"",
+              background: isActive ? "transparent" : "",
               borderBottom: isActive ? "4px solid #F53F5E" : "",
               viewTimelineName: isTransiTion ? "silder" : "",
             };
-          }} to="/surveys">Surveys</NavLink>
+          }}
+          to="/surveys"
+        >
+          Surveys
+        </NavLink>
       </li>
 
       <li>
-        <NavLink  className="hover:bg-base-200 p-2 font-bold   hover:rounded-lg"
+        <NavLink
+          className="hover:bg-base-200 p-2 font-bold   hover:rounded-lg"
           style={({ isActive, isTransiTion }) => {
             return {
               fontWeight: isActive ? "bold" : "",
               color: isActive ? "#F53F5E" : "",
-              background:isActive? 'transparent':"",
+              background: isActive ? "transparent" : "",
               borderBottom: isActive ? "4px solid #F53F5E" : "",
               viewTimelineName: isTransiTion ? "silder" : "",
             };
-          }} to="/pricing">Pricing</NavLink>
+          }}
+          to="/pricing"
+        >
+          Pricing
+        </NavLink>
       </li>
     </>
   );
@@ -80,11 +98,7 @@ const Navbar = () => {
       setTheme("light");
     }
   };
-  const handleLogout = () => {
-    logOut().then(() => {
-      toast.success("Logout successfully");
-    });
-  };
+
   const handleDropdownToggle = () => {
     setDropdownOpen((prev) => !prev);
   };
@@ -93,8 +107,8 @@ const Navbar = () => {
   if (error) {
     console.log(error);
   }
-  if(isLoading){
-    return <Loader/>
+  if (isLoading) {
+    return <Loader />;
   }
   return (
     <div>
@@ -183,12 +197,6 @@ const Navbar = () => {
                   >
                     Dashboard
                   </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="btn text-rose-500 border-rose-500 bg-transparent hover:bg-rose-500 hover:text-white"
-                  >
-                    Logout
-                  </button>
                 </>
               ) : (
                 <>

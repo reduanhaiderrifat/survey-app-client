@@ -4,10 +4,13 @@ import { LuLogOut } from "react-icons/lu";
 import ManageUser from "./ManageUser";
 import AdminPayment from "./AdminPayment";
 import SurveyResponse from "./SurveyResponse";
+import Profile from "../../../shard/Profile";
+import toast from "react-hot-toast";
+import useAuth from "../../../hooks/useAuth";
 
 const AdminDashboard = () => {
     const [activeSection, setActiveSection] = useState("Manage user");
-
+    const { logOut } = useAuth();
     const renderContent = () => {
       switch (activeSection) {
         case "Manage user":
@@ -17,10 +20,15 @@ const AdminDashboard = () => {
         case "survey responses":
           return <SurveyResponse />;
         case "profile":
-          return <div>Profile</div>;
+          return <Profile/>;
         default:
           return <ManageUser />;
       }
+    };
+    const handleLogout = () => {
+      logOut().then(() => {
+        toast.success("Logout successfully");
+      });
     };
     return (
         <div>
@@ -96,7 +104,7 @@ const AdminDashboard = () => {
                 </button>
               </li>
               <li>
-                <button className="btn hover:bg-rose-500 text-rose-500 border-rose-500 text-lg font-bold  hover:text-white">
+                <button onClick={handleLogout} className="btn hover:bg-rose-500 text-rose-500 border-rose-500 text-lg font-bold  hover:text-white">
                   <LuLogOut size={30} /> Logout
                 </button>
               </li>

@@ -3,9 +3,13 @@ import { LuLogOut } from "react-icons/lu";
 import Survey from "./Survey";
 import Report from "./Report";
 import { useState } from "react";
+import Profile from "../../../shard/Profile";
+import useAuth from "../../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const UserDashBoard = () => {
   const [activeSection, setActiveSection] = useState("Survey");
+  const { logOut } = useAuth();
 
   const renderContent = () => {
     switch (activeSection) {
@@ -13,12 +17,16 @@ const UserDashBoard = () => {
         return <Survey />;
       case "report":
         return <Report />;
-
       case "profile":
-        return <div>Profile</div>;
+        return <Profile />;
       default:
         return <Survey />;
     }
+  };
+  const handleLogout = () => {
+    logOut().then(() => {
+      toast.success("Logout successfully");
+    });
   };
   return (
     <div>
@@ -82,7 +90,10 @@ const UserDashBoard = () => {
               </button>
             </li>
             <li>
-              <button className="btn hover:bg-rose-500 text-rose-500 border-rose-500 text-lg font-bold  hover:text-white">
+              <button
+                onClick={handleLogout}
+                className="btn hover:bg-rose-500 text-rose-500 border-rose-500 text-lg font-bold  hover:text-white"
+              >
                 <LuLogOut size={30} /> Logout
               </button>
             </li>

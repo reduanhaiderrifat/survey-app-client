@@ -4,23 +4,32 @@ import { LuLogOut } from "react-icons/lu";
 import CreateForm from "./Surveyor/CreateForm";
 import SurveyorManage from "./Surveyor/SurveyorManage";
 import Profile from "../../shard/Profile";
+import useAuth from "../../hooks/useAuth";
+import toast from "react-hot-toast";
+import SurveyResponse from "./Surveyor/SurveyResponse";
 
 const SurveyorDashboard = () => {
   const [activeSection, setActiveSection] = useState("Survey manage");
-
+  const { logOut } = useAuth();
   const renderContent = () => {
     switch (activeSection) {
       case "Survey manage":
         return <SurveyorManage />;
       case "Survey create":
         return <CreateForm />;
+      case "Survey Response":
+        return <SurveyResponse />;
       case "profile":
         return <Profile/>;
       default:
         return <SurveyorManage />;
     }
   };
-
+  const handleLogout = () => {
+    logOut().then(() => {
+      toast.success("Logout successfully");
+    });
+  };
   return (
     <div>
       <div className="drawer lg:drawer-open">
@@ -67,6 +76,18 @@ const SurveyorDashboard = () => {
                 <span className="text-lg font-bold">Survey create</span>
               </button>
             </li>
+            <li>
+              <button
+                className={
+                  activeSection === "Survey Response"
+                    ? "bg-rose-500 text-white focus:bg-rose-500 focus:text-white hover:bg-rose-500 hover:text-white"
+                    : "border-rose-500 border-[1px] hover:bg-transparent text-rose-500"
+                }
+                onClick={() => setActiveSection("Survey Response")}
+              >
+                <span className="text-lg font-bold">Survey Admin Response</span>
+              </button>
+            </li>
 
             <div className="flex-grow"></div>
             <li>
@@ -83,7 +104,7 @@ const SurveyorDashboard = () => {
               </button>
             </li>
             <li>
-              <button className="btn hover:bg-rose-500 text-rose-500 border-rose-500 text-lg font-bold  hover:text-white">
+              <button onClick={handleLogout} className="btn hover:bg-rose-500 text-rose-500 border-rose-500 text-lg font-bold  hover:text-white">
                 <LuLogOut size={30} /> Logout
               </button>
             </li>

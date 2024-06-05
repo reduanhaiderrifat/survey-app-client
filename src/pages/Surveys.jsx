@@ -10,6 +10,7 @@ import useAuth from "../hooks/useAuth";
 
 const Surveys = () => {
   const axiosPublic = usePublic();
+
   const { user } = useAuth();
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortByVotes, setSortByVotes] = useState(false);
@@ -88,26 +89,28 @@ const Surveys = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="table">
+          <table className="min-w-full bg-white border border-gray-200">
             {/* head */}
-            <thead>
+            <thead className="bg-rose-500 text-white">
               <tr>
-                <th></th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Vote</th>
-                <th>Action</th>
+                <th className="py-3 px-5 border">#</th>
+                <th className="py-3 px-5 border">Title</th>
+                <th className="py-3 px-5 border">Description</th>
+                <th className="py-3 px-5 border">Vote</th>
+                <th className="py-3 px-5 border">Action</th>
               </tr>
             </thead>
             <tbody>
               {/* row 1 */}
               {surveys.map((survey, idx) => (
-                <tr key={survey._id}>
-                  <th>{idx + 1}</th>
-                  <td>{survey?.title}</td>
-                  <td>{survey?.description}</td>
-                  <td>{survey?.options?.vote}</td>
-                  <td>
+                <tr key={survey._id} className="border-b border-gray-200">
+                  <th className="py-3 px-5 text-center">{idx + 1}</th>
+                  <td className="py-3 px-5 ">{survey?.title}</td>
+                  <td className="py-3 px-5 ">{survey?.description}</td>
+                  <td className="py-3 px-5 text-center">
+                    {survey?.options?.vote}
+                  </td>
+                  <td className="py-3 px-5 text-center">
                     {user?.uid ? (
                       <>
                         <button
@@ -121,6 +124,8 @@ const Surveys = () => {
                       <>
                         <Link
                           to="/login"
+                          state={location.pathname}
+                          replace={true}
                           className="bg-rose-500 text-white hover:bg-rose-500 active:scale-95 px-3 py-1 rounded-lg"
                         >
                           Participate
