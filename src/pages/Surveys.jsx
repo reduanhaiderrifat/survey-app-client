@@ -7,10 +7,11 @@ import { FaArrowDownAZ } from "react-icons/fa6";
 import Loader from "../components/loader/Loader";
 import { FaSortAmountDownAlt } from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const Surveys = () => {
   const axiosPublic = usePublic();
-
+  const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortByVotes, setSortByVotes] = useState(false);
@@ -43,6 +44,15 @@ const Surveys = () => {
     setSortByVotes((prev) => !prev);
     await refetch();
   };
+  const { data: match = {} } = useQuery({
+    queryKey: ["userMatch", user?.uid],
+    enabled: !!user?.uid,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/userMatch/${user?.uid}`);
+      return res.data;
+    },
+  });
+  console.log(match?.uid);
   const handleParticipateClick = (survey) => {
     const currentDate = new Date();
     const deadlineDate = new Date(survey?.deadline);
@@ -54,7 +64,15 @@ const Surveys = () => {
         text: "The deadline for this survey has passed.",
       });
     } else {
-      navigate(`/uservote/${survey._id}`);
+      if (match?.uid === user?.uid) {
+        Swal.fire({
+          icon: "error",
+          title: "Already participate",
+          text: "You can't participate the survey.",
+        });
+      } else {
+        navigate(`/uservote/${survey._id}`);
+      }
     }
   };
   if (isLoading) return <Loader />;

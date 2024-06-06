@@ -32,7 +32,6 @@ const ManageUser = () => {
   };
   const handleButtonClick = async (role) => {
     console.log(`Promoted to ${role}`);
-    if (role !== "admin") {
       const res = await axiosSecure.patch(`/adminUpdate/${userId}`, { role });
       if (res.data?.modifiedCount > 0) {
         await refetch();
@@ -45,16 +44,10 @@ const ManageUser = () => {
           timer: 1500,
         });
       }
-    } else {
-      Swal.fire({
-        icon: "warning",
-        title: "Cannot change role",
-        text: "The user is already an admin and their role cannot be changed.",
-      });
-    }
+   
   };
   return (
-    <div className="container mx-auto p-4">
+    <div className=" ">
       <div className="flex justify-end mb-4">
         <div className="dropdown dropdown-hover dropdown-left">
           <div

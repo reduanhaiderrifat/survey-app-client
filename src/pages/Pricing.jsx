@@ -9,7 +9,7 @@ const Pricing = () => {
       className="flex justify-center items-center h-screen"
       style={{ backgroundImage: `url(${svg})` }}
     >
-      <div className="border-2 border-rose-500 p-3 rounded-lg bg-white/80">
+      <div className="border-2 border-rose-500 p-3 rounded-lg bg-white">
         <h2 className="text-3xl text-center font-semibold  text-black">
           Get our membership for the pro-user ($50)
         </h2>

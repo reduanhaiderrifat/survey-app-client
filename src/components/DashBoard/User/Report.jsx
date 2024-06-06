@@ -38,6 +38,16 @@ const Report = () => {
       }
     });
   };
+  if (reports?.length === 0) {
+    return (
+      <div className="min-h-[calc(100vh-242px)] flex items-center justify-center">
+      <div className="text-center">
+        <h3 className="text-2xl font-bold">OPPS!!</h3>
+      <h2 className="text-2xl font-bold">No Data available</h2>
+      </div>
+      </div>
+    );
+  }
   return (
     <div>
       {reports.map((report) => (

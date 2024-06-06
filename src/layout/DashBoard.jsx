@@ -5,7 +5,7 @@ import Footer from "../shard/Footer";
 
 const DashBoard = () => {
     return (
-        <div className="">
+        <div className="px-2">
         <Navbar />
         <div className="mt-[68px] min-h-[calc(100vh-252px)]">
           <Outlet />

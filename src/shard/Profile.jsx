@@ -36,7 +36,7 @@ const Profile = () => {
     formData.append("image", image);
     const imageUrl = await imageUpload(image);
     await updateUser(username, imageUrl).then(() => {
-      toast.success('Profile update successfully')
+      toast.success("Profile update successfully");
       closeModal();
     });
   };
@@ -60,8 +60,31 @@ const Profile = () => {
           <p className="p-2 px-4 text-xs text-white bg-pink-500 rounded-full ">
             {former?.role[0].toUpperCase() + former?.role.slice(1)}
           </p>
-
-          <div className="w-full flex p-2 mt-4 rounded-lg justify-between">
+          <h2>
+            You connected :{" "}
+            {new Date(user?.metadata?.creationTime).toLocaleDateString(
+              "en-US",
+              {
+                weekday: "short",
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+              }
+            )}
+          </h2>
+          <h2>
+            You Last active : {" "}
+            {new Date(user?.metadata?.lastSignInTime).toLocaleDateString(
+              "en-US",
+              {
+                weekday: "short",
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+              }
+            )}
+          </h2>
+          <div className="w-full grid grid-cols-1 md:flex p-2 mt-4 rounded-lg justify-between ">
             <div className="flex flex-wrap flex-col gap-4 text-sm text-gray-600 ">
               <p className="flex flex-col">
                 Name
@@ -71,7 +94,9 @@ const Profile = () => {
               </p>
               <p className="flex flex-col">
                 Email
-                <span className="font-bold text-black ">{user?.email}</span>
+                <span className="font-bold text-black ">
+                  {user?.email || "E-Mail not added"}
+                </span>
               </p>
             </div>
             <div className=" mt-8">

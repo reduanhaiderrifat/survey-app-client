@@ -2,6 +2,7 @@ import { Navigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import usePublic from "../hooks/usePublic";
+import Loader from "../components/loader/Loader";
 
 const UserRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -19,7 +20,7 @@ const UserRoute = ({ children }) => {
   });
 
   if (loading || queryLoading) {
-    return "loading";
+    return <Loader/>;
   }
 
   if (userData?.role === 'user') {

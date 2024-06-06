@@ -40,7 +40,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/uservote/:id",
-        element: <UserSurveyVote />,
+        element: (
+          <PrivetRoute>
+            <UserSurveyVote />
+          </PrivetRoute>
+        ),
       },
       {
         path: "/pricing",
@@ -83,11 +87,20 @@ const router = createBrowserRouter([
       },
       {
         path: "user/survey/:id",
-        element: <SurveyForm />,
+        element: (
+          <UserRoute>
+            {" "}
+            <SurveyForm />
+          </UserRoute>
+        ),
       },
       {
         path: "Pro-User/survey/:id",
-        element: <SurveyForm />,
+        element: (
+          <ProUserRoute>
+            <SurveyForm />
+          </ProUserRoute>
+        ),
       },
       {
         path: "admin",
@@ -107,11 +120,19 @@ const router = createBrowserRouter([
       },
       {
         path: "surveyor/update/:id",
-        element: <UpdateForm />,
+        element: (
+          <SurveyorRoute>
+            <UpdateForm />
+          </SurveyorRoute>
+        ),
       },
       {
         path: "surveyor/details/:id",
-        element: <SurveyorDetails />,
+        element: (
+          <SurveyorRoute>
+            <SurveyorDetails />
+          </SurveyorRoute>
+        ),
       },
     ],
   },

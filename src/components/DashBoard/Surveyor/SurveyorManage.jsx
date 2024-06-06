@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../hooks/useAuth";
-import { Link, } from "react-router-dom";
+import { Link } from "react-router-dom";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 const SurveyorManage = () => {
   const { user } = useAuth();
@@ -13,6 +13,13 @@ const SurveyorManage = () => {
     },
   });
   console.log(surveys);
+  if (surveys.length === 0) {
+    return (
+      <div className="flex justify-center items-center min-h-[calc(100vh-24px)]">
+        <h1 className="text-2xl font-bold">No survey responses available.</h1>
+      </div>
+    );
+  }
   return (
     <div>
       <div className="overflow-x-auto">
@@ -38,7 +45,7 @@ const SurveyorManage = () => {
                 <td className="py-3 px-5 border">{survey?.deadline}</td>
                 <td className="py-3 px-5 text-center">
                   <Link
-                  to={`details/${survey?._id}`}
+                    to={`details/${survey?._id}`}
                     className="px-2 py-1  rounded-lg text-white bg-rose-500 active:scale-95"
                   >
                     Details

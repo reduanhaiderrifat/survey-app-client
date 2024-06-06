@@ -6,12 +6,14 @@ import useAuth from "../hooks/useAuth";
 import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import { useNavigate } from "react-router-dom";
 
 const CheckOutForm = () => {
   const stripe = useStripe();
   const [clientSecret, setClientSecret] = useState("");
   const elements = useElements();
   const { user } = useAuth();
+  const navigate= useNavigate()
   const axiosSecure = useAxiosSecure();
   const axiosPublic = usePublic();
   const price = 50;
@@ -83,6 +85,7 @@ const CheckOutForm = () => {
           showConfirmButton: false,
           timer: 1500,
         });
+        navigate(location?.state ? location.state : "/");
         //now save them into data base
         const payment = {
           email: user?.email,

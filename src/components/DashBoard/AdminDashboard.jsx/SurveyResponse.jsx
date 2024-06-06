@@ -9,6 +9,7 @@ const SurveyResponse = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const modalRef = useRef(null);
+  const [uid, setUid] = useState("");
   const [id, setId] = useState("");
   const [feedback, setFeedback] = useState("");
   const [preStatus, setPreStatus] = useState("");
@@ -20,9 +21,10 @@ const SurveyResponse = () => {
     },
   });
 
-  const handleStatus = (id, preStatus) => {
+  const handleStatus = (id, preStatus, useruid) => {
     setId(id);
     setPreStatus(preStatus);
+    setUid(useruid);
     showModal();
   };
 
@@ -33,6 +35,7 @@ const SurveyResponse = () => {
       feedback: feedback,
       email: user?.email,
       surveyPostId: id,
+      surveyorUid:uid,
     };
     try {
       const { data } = await axiosSecure.post("/feedbackPost", feedbackData);
@@ -98,7 +101,13 @@ const SurveyResponse = () => {
                 <td className="border border-gray-200 p-2 text-center">
                   <button
                     className="text-white bg-rose-500 hover:bg-rose-600 px-4 py-2 rounded-md active:scale-95"
-                    onClick={() => handleStatus(response._id, response.status)}
+                    onClick={() =>
+                      handleStatus(
+                        response._id,
+                        response.status,
+                        response.useruid
+                      )
+                    }
                   >
                     {response?.status}
                   </button>

@@ -10,8 +10,8 @@ import Twitter from "../components/Social/Twitter";
 const Login = () => {
   const { singInUser, setLoading, googleUser, twitterhUser } = useAuth();
   const navigate = useNavigate();
-  const [captcha, setcaptcha] = useState("");
-  const axiosPubic = usePublic();
+  const [captcha, setCaptcha] = useState("");
+  const axiosPublic = usePublic();
   const location = useLocation();
   const [captchaLoaded, setCaptchaLoaded] = useState(false);
   const [recaptchaValid, setRecaptchaValid] = useState(false);
@@ -19,17 +19,15 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
-    console.log(data);
     const { email, password } = data;
-    setcaptcha("");
+    setCaptcha("");
 
     if (!recaptchaValid) {
       toast.error("Please complete the reCAPTCHA");
-      setcaptcha("Please complete the reCAPTCHA");
+      setCaptcha("Please complete the reCAPTCHA");
       return;
     }
     singInUser(email, password)
@@ -48,16 +46,15 @@ const Login = () => {
   const handleGoogle = () => {
     googleUser()
       .then((res) => {
-        console.log(res.user);
-        const currentuser = res?.user;
-        if (currentuser) {
+        const currentUser = res?.user;
+        if (currentUser) {
           const userData = {
-            email: currentuser?.email || "email not add",
-            uid:currentuser?.uid,
-            name:currentuser?.dispalyName,
+            email: currentUser?.email || "email not added",
+            uid: currentUser?.uid,
+            name: currentUser?.displayName,
             role: "user",
           };
-          axiosPubic
+          axiosPublic
             .post("/users", userData)
             .then((res) => {
               console.log(res.data);
@@ -77,19 +74,19 @@ const Login = () => {
         setLoading(false);
       });
   };
+
   const handleTwitter = () => {
     twitterhUser()
       .then((res) => {
-        console.log(res.user);
-        const currentuser = res?.user;
-        if (currentuser) {
+        const currentUser = res?.user;
+        if (currentUser) {
           const userData = {
-            email: currentuser?.email || "email not add",
-            name:currentuser?.dispalyName,
-            uid: currentuser?.uid,
+            email: currentUser?.email || "email not added",
+            name: currentUser?.displayName,
+            uid: currentUser?.uid,
             role: "user",
           };
-          axiosPubic
+          axiosPublic
             .post("/users", userData)
             .then((res) => {
               console.log(res.data);
@@ -110,113 +107,99 @@ const Login = () => {
       });
   };
   function onChange(value) {
-    console.log("Captcha value:", value);
-    setRecaptchaValid(!!value); // Update reCAPTCHA state based on the value
+    setRecaptchaValid(!!value); 
   }
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setCaptchaLoaded(true);
-    }, 0); // Add a small delay to ensure ReCAPTCHA loads
-
-    return () => clearTimeout(timer); // Cleanup the timer
+    }, 0); 
+    return () => clearTimeout(timer); 
   }, []);
 
   return (
-    <div>
-      <div className="hero  ">
-        <div className="min-w-[500px]">
-          <div className="card w-full  shadow-2xl">
-            <div className="text-center ">
-              <h1 className="text-4xl text-rose-500 font-bold">Login now!</h1>
-            </div>
-            <form onSubmit={handleSubmit(onSubmit)} className="card-body">
-              <div className="form-control ">
-                <label className="label">
-                  <span className="label-text font-bold">Email</span>
-                </label>
-                <input
-                  type="email"
-                  placeholder="email"
-                  className="input input-bordered"
-                  {...register("email", {
-                    required: true,
-                    pattern: {
-                      value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                      message: "Enter a valid email address",
-                    },
-                  })}
-                />
-                {errors.email && (
-                  <span className="text-red-500">This field is required</span>
-                )}{" "}
-                {errors.email && (
-                  <p className="text-red-500">{errors.email.message}</p>
-                )}
-              </div>
-              <div className="form-control x">
-                <label className="label">
-                  <span className="label-text font-bold">Password</span>
-                </label>
-                <input
-                  type="password"
-                  placeholder="password"
-                  className="input input-bordered"
-                  {...register("password", {
-                    required: true,
-                    pattern: {
-                      value:
-                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{6,}$/,
-                      message: `Password must contain at least one uppercase letter, one lowercase letter, and one special character`,
-                    },
-                  })}
-                />
-                {errors.password && (
-                  <span className="text-red-500">This field is required</span>
-                )}{" "}
-                {errors.password && (
-                  <p className="text-red-500 break-all w-[400px]">
-                    {errors.password.message}
-                  </p>
-                )}
-                <label className="label">
-                  <a href="#" className="label-text-alt link link-hover">
-                    Forgot password?
-                  </a>
-                </label>
-              </div>
-              {captchaLoaded && (
-                <ReCAPTCHA
-                  sitekey={`${import.meta.env.VITE_RECAPTCHA_SITE_KEY}`}
-                  onChange={onChange}
-                />
-              )}{" "}
-              {captcha && <span className="text-red-500">{captcha}</span>}
-              <div className="form-control mt-6">
-                <button className="btn bg-rose-500 hover:bg-rose-500 text-white text-lg">
-                  Login
-                </button>
-              </div>
-            </form>
-            <div className="flex  gap-3 justify-center">
-              <span onClick={handleGoogle}>
-                <Google />
-              </span>{" "}
-              <span onClick={handleTwitter}>
-                <Twitter />
-              </span>
-            </div>
-            <p className="text-center my-3">
-              Do not have an account please!{" "}
-              <Link
-                to="/singup"
-                className="btn-link no-underline text-rose-500 font-bold"
-              >
-                Singup
-              </Link>
-            </p>
-          </div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md px-6 py-8 mx-auto bg-white shadow-lg rounded-lg">
+        <div className="text-center mb-6">
+          <h1 className="text-4xl text-rose-500 font-bold">Login now!</h1>
         </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-bold">Email</span>
+            </label>
+            <input
+              type="email"
+              placeholder="email"
+              className="input input-bordered w-full"
+              {...register("email", {
+                required: "This field is required",
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  message: "Enter a valid email address",
+                },
+              })}
+            />
+            {errors.email && (
+              <p className="text-red-500 mt-1">{errors.email.message}</p>
+            )}
+          </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-bold">Password</span>
+            </label>
+            <input
+              type="password"
+              placeholder="password"
+              className="input input-bordered w-full"
+              {...register("password", {
+                required: "This field is required",
+                pattern: {
+                  value:
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{6,}$/,
+                  message: `Password must contain at least one uppercase letter, one lowercase letter, and one special character`,
+                },
+              })}
+            />
+            {errors.password && (
+              <p className="text-red-500 mt-1">{errors.password.message}</p>
+            )}
+            <label className="label">
+              <a href="#" className="label-text-alt link link-hover">
+                Forgot password?
+              </a>
+            </label>
+          </div>
+          {captchaLoaded && (
+            <ReCAPTCHA
+              sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+              onChange={onChange}
+            />
+          )}
+          {captcha && <p className="text-red-500 mt-1">{captcha}</p>}
+          <div className="form-control mt-6">
+            <button className="btn bg-rose-500 hover:bg-rose-600 text-white text-lg w-full">
+              Login
+            </button>
+          </div>
+        </form>
+        <div className="flex justify-center gap-3 mt-6">
+          <span onClick={handleGoogle}>
+            <Google />
+          </span>
+          <span onClick={handleTwitter}>
+            <Twitter />
+          </span>
+        </div>
+        <p className="text-center my-3">
+          Do not have an account?{" "}
+          <Link
+            to="/singup"
+            className="btn-link no-underline text-rose-500 font-bold"
+          >
+            Signup
+          </Link>
+        </p>
       </div>
     </div>
   );

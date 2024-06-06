@@ -34,8 +34,8 @@ const Survey = () => {
       <div className="overflow-x-auto">
         <table className="table">
           {/* head */}
-          <thead>
-            <tr className="bg-gray-100">
+          <thead className="text-white bg-rose-500">
+            <tr className="">
               <th className="border border-gray-200 p-2">#</th>
               <th className="border border-gray-200 p-2">Title</th>
               <th className="border border-gray-200 p-2">Category</th>

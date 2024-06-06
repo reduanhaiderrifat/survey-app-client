@@ -19,23 +19,46 @@ const MostVote = () => {
       </h2>
       <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 ">
         {votes?.map((vote) => (
-          <div key={vote._id} className="border rounded-md hover:shadow-2xl">
-            <h1 className="text-center">
-              <strong>category:</strong>{" "}
-              <span className="font-semibold">{vote?.category}</span>
-            </h1>
-            <div className="px-4 py-2 space-y-3">
-              <h2>
-                <strong>{vote?.title}</strong>
-              </h2>
-              <p className="break-all">
-                <strong>Q.</strong> {vote?.description}?
-              </p>
-              <div className="flex items-center justify-between">
-                <p className="bg-rose-500 text-white px-3 rounded-full">
+          <div
+            key={vote._id}
+            className="border rounded-md shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out transform lg:hover:scale-105 my-4"
+          >
+            <div className="bg-blue-500 text-white py-2 rounded-t-md">
+              <h1 className="text-center text-lg font-bold">
+                Category:{" "}
+                <span className="font-semibold">{vote?.category}</span>
+              </h1>
+            </div>
+            <div className="px-6 py-4 space-y-4 bg-white rounded-b-md">
+              <div className="space-y-2">
+                <h2 className="text-xl font-bold text-gray-800 border-b pb-2">
+                  1. {vote?.title}
+                </h2>
+                <p className="break-words text-gray-700 text-lg">
+                  <strong>Q.</strong> {vote?.description}?
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-xl font-bold text-gray-800 border-b pb-2">
+                  2. {vote?.title1}
+                </h2>
+                <p className="break-words text-gray-700 text-lg">
+                  <strong>Q.</strong> {vote?.description1}?
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-xl font-bold text-gray-800 border-b pb-2">
+                  3. {vote?.title2}
+                </h2>
+                <p className="break-words text-gray-700 text-lg">
+                  <strong>Q.</strong> {vote?.description2}?
+                </p>
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <p className="bg-rose-500 text-white px-3 py-1 rounded-full transition duration-300 ease-in-out hover:bg-rose-700">
                   Vote ({vote?.options?.vote})
                 </p>
-                <p className="bg-rose-500 text-white px-3 rounded-full">
+                <p className="bg-rose-500 text-white px-3 py-1 rounded-full transition duration-300 ease-in-out hover:bg-rose-700">
                   Status: {vote?.status}
                 </p>
               </div>

@@ -75,7 +75,7 @@ const Navbar = () => {
           }}
           to="/pricing"
         >
-          Pricing
+          Pro-Membership
         </NavLink>
       </li>
     </>
@@ -104,15 +104,16 @@ const Navbar = () => {
   };
 
   console.log(user?.uid);
+
   if (error) {
     console.log(error);
   }
-  if (isLoading) {
+  if (isLoading && !formars.role) {
     return <Loader />;
   }
   return (
     <div>
-      <div className="navbar bg-base-100 fixed z-50 top-0 shadow-lg">
+      <div className="navbar bg-base-200 fixed z-50 top-0 shadow-lg">
         <div className="navbar-start">
           <div className="dropdown">
             <div
@@ -132,12 +133,12 @@ const Navbar = () => {
               </ul>
             )}
           </div>
-          <p className="text-2xl font-bold">
+          <p className="text-xl md:text-4xl font-bold">
             Survey<span className="text-rose-500">Sense</span>{" "}
           </p>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1 space-x-7">{links}</ul>
+          <ul className="menu menu-horizontal px-1 font-bold text-lg space-x-7">{links}</ul>
         </div>
         <div className="navbar-end space-x-2 md:space-x-5">
           <label className="cursor-pointer grid place-items-center">
@@ -178,7 +179,7 @@ const Navbar = () => {
             </svg>
           </label>
           {/* user drop down */}
-          <details className="dropdown  dropdown-end">
+          <details className="dropdown  dropdown-end" >
             <summary className="m-1 btn space-x-2 rounded-full hover:shadow-xl hover:bg-transparent bg-transparent">
               <FaBars size={20} />
               <img

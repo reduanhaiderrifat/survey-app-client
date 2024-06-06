@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import usePublic from "../../../hooks/usePublic";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useRef, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import toast from "react-hot-toast";
@@ -13,6 +13,7 @@ const UserSurveyVote = () => {
     const axiosPublic = usePublic();
     const modalRef = useRef(null);
     const { user } = useAuth();
+    const location =useLocation()
     const commentRef = useRef(null);
     const navigate = useNavigate();
     const {id} = useParams()
@@ -186,7 +187,7 @@ const UserSurveyVote = () => {
                   <FaTelegramPlane size={30} />
                 </button>
               ) : (
-                <Link to="/pricing">
+                <Link to="/pricing" state={location.pathname} replace={true}>
                   <FaTelegramPlane size={30} />
                 </Link>
               )}

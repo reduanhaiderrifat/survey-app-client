@@ -4,8 +4,8 @@ import Footer from "../shard/Footer";
 
 const MainLayout = () => {
   return (
-    <div className="">
-      <Navbar />
+    <div className="px-2"> 
+     <Navbar />
       <div className="mt-[68px] min-h-[calc(100vh-252px)]">
         <Outlet />
       </div>
