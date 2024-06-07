@@ -15,7 +15,7 @@ const SurveyorDetails = () => {
   const navigate = useNavigate();
   const [comments, setComments] = useState([]);
   const { id } = useParams();
-  console.log(id);
+
   const { data: matchIds = [], isLoading } = useQuery({
     queryKey: ["ids", id],
     enabled: !!id,
@@ -31,14 +31,14 @@ const SurveyorDetails = () => {
       return data;
     },
   });
-  console.log(votes);
+
   const totalYesLength = votes?.reduce((acc, currentVote) => {
     return acc + (currentVote.answer?.yesAnswers.length || 0);
   }, 0);
   const totalNoLength = votes?.reduce((acc, currentVote) => {
     return acc + (currentVote.answer?.noAnswers.length || 0);
   }, 0);
-  console.log(matchIds);
+
   const handleBack = () => {
     navigate(-1);
   };
@@ -77,9 +77,9 @@ const SurveyorDetails = () => {
   ];
 
   const handleSee = async (uid) => {
-    console.log(uid);
+
     const { data } = await axiosSecure.get(`/userComments/${uid}`);
-    console.log(data);
+ 
     setComments(data);
     if (!data.length == 0) {
       document.getElementById("my_modal_5").showModal();

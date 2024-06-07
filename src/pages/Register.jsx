@@ -59,8 +59,8 @@ const Register = () => {
           };
           axiosPubic
             .post("/users", userData)
-            .then((res) => {
-              console.log(res.data);
+            .then(() => {
+
               navigate(location?.state ? location.state : "/");
             })
             .catch((err) => {
@@ -97,8 +97,8 @@ const Register = () => {
           };
           axiosPubic
             .post("/users", userData)
-            .then((res) => {
-              console.log(res.data);
+            .then(() => {
+
             })
             .catch((err) => {
               console.error(err);
@@ -129,8 +129,8 @@ const Register = () => {
           };
           axiosPubic
             .post("/users", userData)
-            .then((res) => {
-              console.log(res.data);
+            .then(() => {
+
             })
             .catch((err) => {
               console.error(err);

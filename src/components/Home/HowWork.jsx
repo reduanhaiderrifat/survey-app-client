@@ -2,7 +2,7 @@ import work from "../../../public/work.jpg";
 const HowWork = () => {
   return (
     <div className="">
-        <h1 className="text-4xl font-bold text-center my-20 lg:my-44">Empowering User Engagement and Ensuring Quality</h1>
+        <h1 className="text-3xl md:text-5xl font-bold text-center my-20 lg:my-44">Empowering User <span className="text-rose-500">Engagement and Ensuring</span> Quality</h1>
     <div className="grid grid-cols-1  lg:flex p-3">
       <div className="">
         <ul className="space-y-4 stayCool ">

@@ -10,7 +10,7 @@ const UpdateForm = () => {
   const navigate = useNavigate();
   const {user} = useAuth()
   const { id } = useParams();
-  console.log(id);
+
   const [Yes, setYes] = useState("Yes");
   const [No, setNo] = useState("NO");
   const axiosSecure = useAxiosSecure();
@@ -28,7 +28,7 @@ const UpdateForm = () => {
       return data;
     },
   });
-  console.log(survey);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -53,11 +53,9 @@ const UpdateForm = () => {
       options: { Yes, No, vote },
       useruid: user?.uid,
     };
-    console.log(surveyData);
+
     try {
       const response = await axiosSecure.put(`/survey/${survey?._id}`, surveyData);
-      console.log("Survey Update:", response.data);
-
       if (response.data.modifiedCount>0) {
         Swal.fire({
           position: "top-center",

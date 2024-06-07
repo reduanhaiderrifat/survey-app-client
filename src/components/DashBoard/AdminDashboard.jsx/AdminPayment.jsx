@@ -9,7 +9,6 @@ const AdminPayment = () => {
       return response.data;
     },
   });
-  console.log(payments);
   if (payments.length === 0) {
     return (
       <div className="flex justify-center items-center h-screen">

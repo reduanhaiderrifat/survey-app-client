@@ -21,17 +21,14 @@ const ManageUser = () => {
     refetch();
   }, [sortRole, refetch]);
 
-  console.log(users);
   const showModal = (id) => {
     modalRef.current.showModal();
     setUserId(id);
   };
-  console.log(userId);
   const handlerolesort = (sort) => {
     setSortRole(sort);
   };
   const handleButtonClick = async (role) => {
-    console.log(`Promoted to ${role}`);
       const res = await axiosSecure.patch(`/adminUpdate/${userId}`, { role });
       if (res.data?.modifiedCount > 0) {
         await refetch();

@@ -2,7 +2,7 @@ import ques from "../../../public/ques.jpg";
 const FaqAbout = () => {
   return (
     <div className="">
-      <h2 className="text-3xl lg:text-6xl text-center font-bold my-20 lg:my-44">
+      <h2 className="text-3xl lg:text-5xl text-center font-bold my-20 lg:my-44">
         Frequently Asked <span className="text-rose-500">Questions</span>
       </h2>
       <div className="grid grid-cols-1 lg:flex w-full">

@@ -78,7 +78,7 @@ const SurveyForm = () => {
     }
     //----------------
     const count = calculateVoteCount();
-    console.log(count);
+
     const { data } = await axiosPublic.patch(`/userVote/${survey?._id}`, {
       vote: count,
     });

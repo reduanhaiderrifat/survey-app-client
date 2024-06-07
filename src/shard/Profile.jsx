@@ -27,7 +27,7 @@ const Profile = () => {
       modalRef.current.close();
     }
   };
-  console.log(user);
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const username = e.target.name.value;
@@ -42,7 +42,7 @@ const Profile = () => {
     }
     await updateUser(username, imageUrl).then(async () => {
       await axiosSecure.patch(`/updateName/${user?.uid}`, { username });
-      console.log(username);
+
       toast.success("Profile update successfully");
       closeModal();
     });
@@ -50,7 +50,7 @@ const Profile = () => {
   };
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="bg-white shadow-lg rounded-2xl w-3/5">
+      <div className="bg-white shadow-lg rounded-2xl md:w-3/5">
         <img
           alt="profile"
           src={wave}

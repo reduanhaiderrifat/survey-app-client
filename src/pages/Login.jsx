@@ -57,8 +57,8 @@ const Login = () => {
           };
           axiosPublic
             .post("/users", userData)
-            .then((res) => {
-              console.log(res.data);
+            .then(() => {
+
             })
             .catch((err) => {
               console.error(err);
@@ -89,8 +89,8 @@ const Login = () => {
           };
           axiosPublic
             .post("/users", userData)
-            .then((res) => {
-              console.log(res.data);
+            .then(() => {
+
             })
             .catch((err) => {
               console.error(err);

@@ -22,7 +22,7 @@ const CheckOutForm = () => {
     const { data } = await axiosSecure.post("/create-payment-intent", {
       price,
     });
-    console.log(data.clientSecret);
+
     setClientSecret(data.clientSecret);
   }, [axiosSecure]);
   useEffect(() => {
@@ -54,7 +54,7 @@ const CheckOutForm = () => {
     });
 
     if (error) {
-      console.log("[error]", error);
+
       toast.error(error.message);
     } else {
       console.log("[PaymentMethod]", paymentMethod);
@@ -71,7 +71,6 @@ const CheckOutForm = () => {
         },
       });
     if (confirError) {
-      console.log("[error]", error);
       toast.error(error.message);
     } else {
       console.log("[paymentIntent]", paymentIntent);

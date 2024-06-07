@@ -15,7 +15,7 @@ const Survey = () => {
       return res.data;
     },
   });
-  console.log(surveys);
+
   const handleParticipateClick = async(survey) => {
     const currentDate = new Date();
     const deadlineDate = new Date(survey?.deadline);
@@ -33,7 +33,7 @@ const Survey = () => {
     const userMatch = res.data;
     if (Array.isArray(userMatch)) {
       const userAlreadyParticipated = userMatch.some(match => match.uid === user.uid);
- console.log(userAlreadyParticipated);
+
       if (userAlreadyParticipated) {
         Swal.fire({
           icon: "error",

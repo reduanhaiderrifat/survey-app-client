@@ -12,7 +12,7 @@ const RecentSurvey = () => {
     },
   });
   return (
-    <div className="md:my-24 md:mx-14">
+    <div className="mt-14 md:my-24 md:mx-14">
       <h2 className="text-3xl text-center font-bold">
         Check Out the <span className="text-rose-500">Most Recent</span> Surveys
         Here

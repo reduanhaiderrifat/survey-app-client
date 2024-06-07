@@ -61,12 +61,10 @@ const Surveys = () => {
 
     const res = await axiosSecure.get(`/userMatch/${survey._id}`);
     const userMatch = res.data;
-    console.log(userMatch);
-    console.log("User Match UID:", userMatch?.uid);
-    console.log("Current User UID:", user?.uid);
+ 
     if (Array.isArray(userMatch)) {
       const userAlreadyParticipated = userMatch.some(match => match.uid === user.uid);
- console.log(userAlreadyParticipated);
+
       if (userAlreadyParticipated) {
         Swal.fire({
           icon: "error",
@@ -123,8 +121,8 @@ const Surveys = () => {
             <thead className="bg-rose-500 text-white">
               <tr>
                 <th className="py-3 px-5 border">#</th>
-                <th className="py-3 px-5 border">Category</th>
-                <th className="py-3 px-5 border">Deadline</th>
+                <th className="py-3 px-5 border">Title</th>
+                <th className="py-3 px-5 border">Description</th>
                 <th className="py-3 px-5 border">Vote</th>
                 <th className="py-3 px-5 border">Action</th>
               </tr>
@@ -134,8 +132,8 @@ const Surveys = () => {
               {surveys.map((survey, idx) => (
                 <tr key={survey._id} className="border-b border-gray-200">
                   <th className="py-3 px-5 text-center">{idx + 1}</th>
-                  <td className="py-3 px-5 ">{survey?.category}</td>
-                  <td className="py-3 px-5 ">{survey?.deadline}</td>
+                  <td className="py-3 px-5 ">{survey?.title}</td>
+                  <td className="py-3 px-5 ">{survey?.description}</td>
                   <td className="py-3 px-5 text-center">
                     {survey?.options?.vote}
                   </td>

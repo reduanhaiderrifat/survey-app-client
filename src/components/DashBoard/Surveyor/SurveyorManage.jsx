@@ -12,7 +12,7 @@ const SurveyorManage = () => {
       return data;
     },
   });
-  console.log(surveys);
+
   if (surveys.length === 0) {
     return (
       <div className="flex justify-center items-center min-h-[calc(100vh-24px)]">

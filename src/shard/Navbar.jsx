@@ -108,9 +108,6 @@ const Navbar = () => {
   const handleDropdownToggle = () => {
     setDropdownOpen((prev) => !prev);
   };
-
-  console.log(user?.uid);
-
   if (error) {
     console.log(error);
   }

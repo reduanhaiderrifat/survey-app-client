@@ -32,7 +32,7 @@ const {user} = useAuth()
   if (isSurveyLoading) {
     return <Loader/>;
   }
-  console.log(surveys);
+
   if (combinedData.length === 0) {
     return <div className="flex justify-center items-center min-h-[calc(100vh-24px)]"><h1 className="text-2xl font-bold">No survey responses available.</h1></div>;
   }

@@ -14,7 +14,7 @@ const Report = () => {
       return data;
     },
   });
-  console.log(reports);
+
   const handleDelete = async (id) => {
     Swal.fire({
       title: "Are you sure?",

@@ -7,6 +7,7 @@ const CreateForm = () => {
   const [deadline, setDeadline] = useState("");
   const { user } = useAuth();
   const [Yes, setYes] = useState("Yes");
+  const [loading, setLoading] = useState(false);
   const [No, setNo] = useState("NO");
   const axiosSecure = useAxiosSecure();
   const categories = [
@@ -19,6 +20,7 @@ const CreateForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const form = e.target;
     const title = form.title.value;
     const description = form.description.value;
@@ -53,6 +55,7 @@ const CreateForm = () => {
           showConfirmButton: false,
           timer: 1500,
         });
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error creating survey:", error);
@@ -173,9 +176,13 @@ const CreateForm = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-rose-500 text-white p-2 rounded hover:bg-rose-600"
+          className="w-full bg-rose-500 text-white p-3 rounded hover:bg-rose-600"
         >
-          Create Survey
+          {loading ? (
+            <span className="loading loading-spinner loading-md"></span>
+          ) : (
+            "Create Survey"
+          )}
         </button>
       </form>
     </div>
