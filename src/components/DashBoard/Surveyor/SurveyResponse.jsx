@@ -47,7 +47,6 @@ const {user} = useAuth()
               <th className="py-3 px-5 text-left">#</th>
               <th className="py-3 px-5 text-left">Email</th>
               <th className="py-3 px-5 text-left">Feedback</th>
-              <th className="py-3 px-5 text-left">Title</th>
               <th className="py-3 px-5 text-left">Category</th>
               <th className="py-3 px-5 text-left">Status</th>
             </tr>
@@ -59,7 +58,6 @@ const {user} = useAuth()
                 <th className="py-3 px-2 border">{idx + 1}</th>
                 <td className="py-3 px-2 border">{feedback?.email}</td>
                 <td className="py-3 px-3 w-1/3 border">{feedback?.feedback}</td>
-                <td className="py-3 px-1 border">{survey?.title}</td>
                 <td className="py-3 px-1 border">{survey?.category}</td>
                 <td className="py-3 px-2 border">{survey?.status}</td>
               </tr>

@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import Google from "../components/Social/Google";
 import Twitter from "../components/Social/Twitter";
@@ -11,7 +10,14 @@ import axios from "axios";
 import usePublic from "../hooks/usePublic";
 
 const Register = () => {
-  const { createUser, setLoading, googleUser, twitterhUser, updateUser } = useAuth();
+  const {
+    createUser,
+    setLoading,
+    googleUser,
+    twitterhUser,
+    updateUser,
+    loading,
+  } = useAuth();
   const navigate = useNavigate();
   const axiosPubic = usePublic();
   const [captcha, setcaptcha] = useState("");
@@ -35,7 +41,9 @@ const Register = () => {
     const formData = new FormData();
     formData.append("image", photo[0]);
     const imgbbRes = await axios.post(
-      `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`,
+      `https://api.imgbb.com/1/upload?key=${
+        import.meta.env.VITE_IMGBB_API_KEY
+      }`,
       formData
     );
     const imageUrl = imgbbRes.data.data.url;
@@ -53,6 +61,7 @@ const Register = () => {
             .post("/users", userData)
             .then((res) => {
               console.log(res.data);
+              navigate(location?.state ? location.state : "/");
             })
             .catch((err) => {
               console.error(err);
@@ -63,7 +72,7 @@ const Register = () => {
           .catch((err) => {
             console.log(err.message);
           });
-        navigate(location?.state ? location.state : "/");
+
         toast.success("User create successfully", {
           duration: 4000,
           position: "top-center",
@@ -224,8 +233,10 @@ const Register = () => {
               {...register("password", {
                 required: true,
                 pattern: {
-                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{6,}$/,
-                  message: "Password must contain at least one uppercase letter, one lowercase letter, and one special character",
+                  value:
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{6,}$/,
+                  message:
+                    "Password must contain at least one uppercase letter, one lowercase letter, and one special character",
                 },
               })}
             />
@@ -233,7 +244,9 @@ const Register = () => {
               <span className="text-red-500 mt-1">This field is required</span>
             )}
             {errors.password && (
-              <p className="text-red-500 mt-1 break-words">{errors.password.message}</p>
+              <p className="text-red-500 mt-1 break-words">
+                {errors.password.message}
+              </p>
             )}
           </div>
           {captchaLoaded && (
@@ -245,7 +258,11 @@ const Register = () => {
           {captcha && <span className="text-red-500 mt-1">{captcha}</span>}
           <div className="form-control mt-6">
             <button className="btn bg-rose-500 hover:bg-rose-600 text-white text-lg w-full">
-              Register
+              {loading ? (
+                <span className="loading loading-spinner loading-md"></span>
+              ) : (
+                "Register"
+              )}
             </button>
           </div>
         </form>

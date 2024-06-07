@@ -1,10 +1,10 @@
 import { useState } from "react";
-import usePublic from "../../../hooks/usePublic";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { IoArrowBack } from "react-icons/io5";
 import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const UpdateForm = () => {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ const UpdateForm = () => {
   console.log(id);
   const [Yes, setYes] = useState("Yes");
   const [No, setNo] = useState("NO");
-  const axiosPublic = usePublic();
+  const axiosSecure = useAxiosSecure();
   const categories = [
     "Customer Satisfaction",
     "Product Feedback",
@@ -24,7 +24,7 @@ const UpdateForm = () => {
   const { data: survey = {} } = useQuery({
     queryKey: ["surveyUpdate", id],
     queryFn: async () => {
-      const { data } = await axiosPublic.get(`/surveyUpdate/${id}`);
+      const { data } = await axiosSecure.get(`/surveyUpdate/${id}`);
       return data;
     },
   });
@@ -34,12 +34,20 @@ const UpdateForm = () => {
     const form = e.target;
     const title = form.title.value;
     const description = form.description.value;
+    const title1 = form.title1.value;
+    const description1 = form.description1.value;
+    const title2 = form.title2.value;
+    const description2 = form.description2.value;
     const category = form.category.value;
     const deadline = form.deadline.value;
     const vote = parseInt(0);
     const surveyData = {
       title,
       description,
+      title1,
+      description1,
+      title2,
+      description2,
       category,
       deadline,
       options: { Yes, No, vote },
@@ -47,7 +55,7 @@ const UpdateForm = () => {
     };
     console.log(surveyData);
     try {
-      const response = await axiosPublic.put(`/survey/${survey?._id}`, surveyData);
+      const response = await axiosSecure.put(`/survey/${survey?._id}`, surveyData);
       console.log("Survey Update:", response.data);
 
       if (response.data.modifiedCount>0) {
@@ -95,6 +103,44 @@ const UpdateForm = () => {
             className="w-full mt-1 p-2 border border-gray-300 rounded"
             required
             defaultValue={survey?.description}
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Title</label>
+          <input
+            type="text"
+            name="title1"
+            className="w-full mt-1 p-2 border border-gray-300 rounded"
+            required
+            defaultValue={survey?.title1}
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Description</label>
+          <textarea
+            name="description1"
+            className="w-full mt-1 p-2 border border-gray-300 rounded"
+            required
+            defaultValue={survey?.description1}
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Title</label>
+          <input
+            type="text"
+            name="title2"
+            className="w-full mt-1 p-2 border border-gray-300 rounded"
+            required
+            defaultValue={survey?.title2}
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Description</label>
+          <textarea
+            name="description2"
+            className="w-full mt-1 p-2 border border-gray-300 rounded"
+            required
+            defaultValue={survey?.description2}
           />
         </div>
         <div className="mb-4">

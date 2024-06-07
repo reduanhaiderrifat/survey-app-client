@@ -8,7 +8,8 @@ import useAuth from "../hooks/useAuth";
 import usePublic from "../hooks/usePublic";
 import Twitter from "../components/Social/Twitter";
 const Login = () => {
-  const { singInUser, setLoading, googleUser, twitterhUser } = useAuth();
+  const { singInUser, setLoading, googleUser, twitterhUser, loading } =
+    useAuth();
   const navigate = useNavigate();
   const [captcha, setCaptcha] = useState("");
   const axiosPublic = usePublic();
@@ -107,14 +108,14 @@ const Login = () => {
       });
   };
   function onChange(value) {
-    setRecaptchaValid(!!value); 
+    setRecaptchaValid(!!value);
   }
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setCaptchaLoaded(true);
-    }, 0); 
-    return () => clearTimeout(timer); 
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -179,7 +180,11 @@ const Login = () => {
           {captcha && <p className="text-red-500 mt-1">{captcha}</p>}
           <div className="form-control mt-6">
             <button className="btn bg-rose-500 hover:bg-rose-600 text-white text-lg w-full">
-              Login
+              {loading ? (
+                <span className="loading loading-spinner loading-md"></span>
+              ) : (
+                "Login"
+              )}
             </button>
           </div>
         </form>

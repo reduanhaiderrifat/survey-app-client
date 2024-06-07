@@ -1,16 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import usePublic from "../../../hooks/usePublic";
 import useAuth from "../../../hooks/useAuth";
 
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Report = () => {
-  const axiosPublic = usePublic();
+  const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const { data: reports = [], refetch } = useQuery({
     queryKey: ["report"],
     queryFn: async () => {
-      const { data } = await axiosPublic.get(`/report/${user?.uid}`);
+      const { data } = await axiosSecure.get(`/report/${user?.uid}`);
       return data;
     },
   });
@@ -26,7 +26,7 @@ const Report = () => {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const { data } = await axiosPublic.delete(`/report/${id}`);
+        const { data } = await axiosSecure.delete(`/report/${id}`);
         if (data.deletedCount > 0) {
           Swal.fire({
             title: "Deleted!",

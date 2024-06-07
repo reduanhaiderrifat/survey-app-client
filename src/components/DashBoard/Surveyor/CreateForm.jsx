@@ -1,14 +1,14 @@
 import { useState } from "react";
-import usePublic from "../../../hooks/usePublic";
 import Swal from "sweetalert2";
 import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const CreateForm = () => {
   const [deadline, setDeadline] = useState("");
   const { user } = useAuth();
   const [Yes, setYes] = useState("Yes");
   const [No, setNo] = useState("NO");
-  const axiosPublic = usePublic();
+  const axiosSecure = useAxiosSecure();
   const categories = [
     "Customer Satisfaction",
     "Product Feedback",
@@ -42,7 +42,7 @@ const CreateForm = () => {
     };
     console.log(surveyData);
     try {
-      const response = await axiosPublic.post("/surveys", surveyData);
+      const response = await axiosSecure.post("/surveys", surveyData);
       console.log("Survey created:", response.data);
       setDeadline("");
       if (response.data.insertedId) {

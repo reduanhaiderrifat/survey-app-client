@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import usePublic from "../../../hooks/usePublic";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import useAuth from "../../../hooks/useAuth";
@@ -8,9 +7,10 @@ import Swal from "sweetalert2";
 import { MdOutlineReportGmailerrorred } from "react-icons/md";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { FaTelegramPlane } from "react-icons/fa";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const SurveyForm = () => {
-  const axiosPublic = usePublic();
+  const axiosPublic = useAxiosSecure();
   const modalRef = useRef(null);
   const commentRef = useRef(null);
   const navigate = useNavigate();
@@ -204,7 +204,9 @@ const SurveyForm = () => {
                     required
                     className="textarea textarea-bordered textarea-lg mt-3 w-full"
                   ></textarea>
-                  <button className="btn">Submit</button>
+                  <button className="btn flex justify-end bg-rose-500 text-white hover:bg-rose-500">
+                    Submit
+                  </button>
                 </form>
 
                 <div className="modal-action">
@@ -237,7 +239,7 @@ const SurveyForm = () => {
                   required
                   className="textarea textarea-bordered textarea-lg mt-3 w-full"
                 ></textarea>
-                <button className="btn">Submit</button>
+                <button className="btn flex justify-end bg-rose-500 text-white hover:bg-rose-500">Submit</button>
               </form>
 
               <div className="modal-action">
@@ -288,7 +290,7 @@ const SurveyForm = () => {
                 <span>{survey?.options?.No}</span>
               </div>
             </div>
-         
+
             <h2 className="text-3xl font-bold mb-4 mt-7 text-gray-700">
               .{survey?.title1}
             </h2>
@@ -317,7 +319,6 @@ const SurveyForm = () => {
                 />{" "}
                 <span>{survey?.options?.No}</span>
               </div>
-          
             </div>
             <h2 className="text-3xl font-bold mb-4 mt-5 text-gray-700">
               .{survey?.title2}

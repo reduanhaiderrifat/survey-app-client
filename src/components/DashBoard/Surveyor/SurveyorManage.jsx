@@ -28,11 +28,13 @@ const SurveyorManage = () => {
           <thead className="bg-rose-500 text-white">
             <tr>
               <th className="py-3 px-5 text-left">#</th>
-              <th className="py-3 px-5 text-left">Title</th>
+              
               <th className="py-3 px-5 text-left">Category</th>
+              <th className="py-3 px-5 text-left">Status</th>
+              <th className="py-3 px-5 text-left">Creation Time</th>
               <th className="py-3 px-5 text-left">Deadline</th>
-              <th className="py-3 px-5 text-center">Details</th>
-              <th className="py-3 px-5 text-center">Update</th>
+              <th className="py-3 px-5 text-center">Survey Responses</th>
+              <th className="py-3 px-5 text-center">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -40,10 +42,12 @@ const SurveyorManage = () => {
             {surveys?.map((survey, idx) => (
               <tr key={survey._id} className="border-b border-gray-200">
                 <th className="py-3 px-5 border"> {idx + 1}</th>
-                <td className="py-3 px-5 border">{survey?.title}</td>
+
                 <td className="py-3 px-5 border">{survey?.category}</td>
+                <td className="py-3 px-5 border">{survey?.status}</td>
+                <td className="py-3 px-5 border">{new Date(survey.timestamp).toLocaleString()}</td>
                 <td className="py-3 px-5 border">{survey?.deadline}</td>
-                <td className="py-3 px-5 text-center">
+                <td className="py-3 px-5 border text-center">
                   <Link
                     to={`details/${survey?._id}`}
                     className="px-2 py-1  rounded-lg text-white bg-rose-500 active:scale-95"
@@ -51,7 +55,7 @@ const SurveyorManage = () => {
                     Details
                   </Link>
                 </td>
-                <td>
+                <td className="py-3 px-5 border">
                   <Link
                     to={`update/${survey._id}`}
                     className="px-2 py-1 rounded-lg text-white bg-rose-500 active:scale-95"

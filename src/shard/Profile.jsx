@@ -1,19 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../hooks/useAuth";
-import usePublic from "../hooks/usePublic";
 import wave from "../../public/wave.svg";
 import { useRef } from "react";
 import { imageUpload } from "../utils";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 const Profile = () => {
   const { user, updateUser } = useAuth();
   const modalRef = useRef();
-  const axiosPublic = usePublic();
-  const { data: former = {} } = useQuery({
+  const axiosSecure = useAxiosSecure();
+  const { data: former = {}, refetch } = useQuery({
     queryKey: ["user", user?.uid],
     enabled: !!user?.uid,
     queryFn: async () => {
-      const res = await axiosPublic.get(`users/${user?.uid}`);
+      const res = await axiosSecure.get(`users/${user?.uid}`);
       return res.data;
     },
   });
@@ -34,11 +34,19 @@ const Profile = () => {
     const image = e.target.image.files[0];
     const formData = new FormData();
     formData.append("image", image);
+
     const imageUrl = await imageUpload(image);
-    await updateUser(username, imageUrl).then(() => {
+    if (!username || !image) {
+      toast.error("Please fill in all fields.");
+      return;
+    }
+    await updateUser(username, imageUrl).then(async () => {
+      await axiosSecure.patch(`/updateName/${user?.uid}`, { username });
+      console.log(username);
       toast.success("Profile update successfully");
       closeModal();
     });
+    refetch();
   };
   return (
     <div className="flex justify-center items-center h-screen">
@@ -73,7 +81,7 @@ const Profile = () => {
             )}
           </h2>
           <h2>
-            You Last active : {" "}
+            You Last active :{" "}
             {new Date(user?.metadata?.lastSignInTime).toLocaleDateString(
               "en-US",
               {
@@ -122,6 +130,7 @@ const Profile = () => {
                       <input
                         type="text"
                         name="name"
+                        required
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                       />
                     </div>
@@ -133,6 +142,7 @@ const Profile = () => {
                         type="file"
                         accept="image/*"
                         name="image"
+                        required
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                       />
                     </div>
@@ -140,7 +150,7 @@ const Profile = () => {
                       <button
                         onClick={closeModal}
                         type="submit"
-                        className="btn bg-blue-500 text-white"
+                        className="btn bg-rose-500 hover:bg-rose-500 text-white"
                       >
                         Save
                       </button>

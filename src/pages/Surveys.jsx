@@ -23,6 +23,7 @@ const Surveys = () => {
     "Employee Engagement",
     "Event Feedback",
   ];
+
   const {
     data: surveys = [],
     refetch,
@@ -35,25 +36,17 @@ const Surveys = () => {
       return res.data;
     },
   });
-  console.log(surveys);
   const handleCategorySelect = async (category) => {
     setSelectedCategory(category);
     await refetch();
   };
+
   const handleSortByVotes = async () => {
     setSortByVotes((prev) => !prev);
     await refetch();
   };
-  const { data: match = {} } = useQuery({
-    queryKey: ["userMatch", user?.uid],
-    enabled: !!user?.uid,
-    queryFn: async () => {
-      const res = await axiosSecure.get(`/userMatch/${user?.uid}`);
-      return res.data;
-    },
-  });
-  console.log(match?.uid);
-  const handleParticipateClick = (survey) => {
+
+  const handleParticipateClick = async (survey) => {
     const currentDate = new Date();
     const deadlineDate = new Date(survey?.deadline);
 
@@ -63,25 +56,43 @@ const Surveys = () => {
         title: "Deadline Over",
         text: "The deadline for this survey has passed.",
       });
-    } else {
-      if (match?.uid === user?.uid) {
+      return;
+    }
+
+    const res = await axiosSecure.get(`/userMatch/${survey._id}`);
+    const userMatch = res.data;
+    console.log(userMatch);
+    console.log("User Match UID:", userMatch?.uid);
+    console.log("Current User UID:", user?.uid);
+    if (Array.isArray(userMatch)) {
+      const userAlreadyParticipated = userMatch.some(match => match.uid === user.uid);
+ console.log(userAlreadyParticipated);
+      if (userAlreadyParticipated) {
         Swal.fire({
           icon: "error",
-          title: "Already participate",
-          text: "You can't participate the survey.",
+          title: "Already Participated",
+          text: "You have already participated in this survey.",
         });
       } else {
         navigate(`/uservote/${survey._id}`);
       }
+    } else {
+      console.error("Unexpected userMatch response format", userMatch);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "There was an error retrieving your participation status. Please try again later.",
+      });
     }
   };
+
   if (isLoading) return <Loader />;
 
   return (
     <div>
       <div>
         <div className="flex justify-center my-4">
-          <details className="dropdown ">
+          <details className="dropdown mt-6">
             <summary className="m-1 btn bg-rose-500 hover:text-rose-500 text-white hover:bg-transparent hover:border-rose-500">
               Filter By Category <FaArrowDownAZ />
             </summary>
@@ -99,7 +110,7 @@ const Surveys = () => {
             </ul>
           </details>
           <button
-            className="m-1 btn bg-blue-500 hover:text-blue-500 text-white hover:bg-transparent hover:border-blue-500"
+            className=" btn mt-7 ml-2 bg-blue-500 hover:text-blue-500 text-white hover:bg-transparent hover:border-blue-500"
             onClick={handleSortByVotes}
           >
             Sort By Votes <FaSortAmountDownAlt />
@@ -112,8 +123,8 @@ const Surveys = () => {
             <thead className="bg-rose-500 text-white">
               <tr>
                 <th className="py-3 px-5 border">#</th>
-                <th className="py-3 px-5 border">Title</th>
-                <th className="py-3 px-5 border">Description</th>
+                <th className="py-3 px-5 border">Category</th>
+                <th className="py-3 px-5 border">Deadline</th>
                 <th className="py-3 px-5 border">Vote</th>
                 <th className="py-3 px-5 border">Action</th>
               </tr>
@@ -123,32 +134,28 @@ const Surveys = () => {
               {surveys.map((survey, idx) => (
                 <tr key={survey._id} className="border-b border-gray-200">
                   <th className="py-3 px-5 text-center">{idx + 1}</th>
-                  <td className="py-3 px-5 ">{survey?.title}</td>
-                  <td className="py-3 px-5 ">{survey?.description}</td>
+                  <td className="py-3 px-5 ">{survey?.category}</td>
+                  <td className="py-3 px-5 ">{survey?.deadline}</td>
                   <td className="py-3 px-5 text-center">
                     {survey?.options?.vote}
                   </td>
                   <td className="py-3 px-5 text-center">
                     {user?.uid ? (
-                      <>
-                        <button
-                          onClick={() => handleParticipateClick(survey)}
-                          className="bg-rose-500 text-white hover:bg-rose-500 active:scale-95 px-3 py-1 rounded-lg"
-                        >
-                          Participate
-                        </button>
-                      </>
+                      <button
+                        onClick={() => handleParticipateClick(survey)}
+                        className="bg-rose-500 text-white hover:bg-rose-500 active:scale-95 px-3 py-1 rounded-lg"
+                      >
+                        Participate
+                      </button>
                     ) : (
-                      <>
-                        <Link
-                          to="/login"
-                          state={location.pathname}
-                          replace={true}
-                          className="bg-rose-500 text-white hover:bg-rose-500 active:scale-95 px-3 py-1 rounded-lg"
-                        >
-                          Participate
-                        </Link>
-                      </>
+                      <Link
+                        to="/login"
+                        state={location.pathname}
+                        replace={true}
+                        className="bg-rose-500 text-white hover:bg-rose-500 active:scale-95 px-3 py-1 rounded-lg"
+                      >
+                        Participate
+                      </Link>
                     )}
                   </td>
                 </tr>

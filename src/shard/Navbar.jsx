@@ -2,28 +2,34 @@ import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { FaBars } from "react-icons/fa";
-import usePublic from "../hooks/usePublic";
 import { useQuery } from "@tanstack/react-query";
-import Loader from "../components/loader/Loader";
+import usePublic from "../hooks/usePublic";
 
 const Navbar = () => {
   const { user } = useAuth();
   const [theme, setTheme] = useState("light");
-  const axiosPubic = usePublic();
+  const axiosPublic = usePublic();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const {
     data: formars = {},
     error,
     isLoading,
+    refetch,
   } = useQuery({
     queryKey: ["users", user?.uid],
     enabled: !!user?.uid,
     queryFn: async () => {
-      const res = await axiosPubic.get(`/users/${user?.uid}`);
+      const res = await axiosPublic.get(`/users/${user?.uid}`);
       return res.data;
     },
   });
+  useEffect(() => {
+    if (user && !formars?.role) {
+      refetch();
+    }
+  }, [user, formars, refetch]);
+
   const links = (
     <>
       <li>
@@ -108,9 +114,6 @@ const Navbar = () => {
   if (error) {
     console.log(error);
   }
-  if (isLoading && !formars.role) {
-    return <Loader />;
-  }
   return (
     <div>
       <div className="navbar bg-base-200 fixed z-50 top-0 shadow-lg">
@@ -138,7 +141,9 @@ const Navbar = () => {
           </p>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1 font-bold text-lg space-x-7">{links}</ul>
+          <ul className="menu menu-horizontal px-1 font-bold text-lg space-x-7">
+            {links}
+          </ul>
         </div>
         <div className="navbar-end space-x-2 md:space-x-5">
           <label className="cursor-pointer grid place-items-center">
@@ -179,7 +184,7 @@ const Navbar = () => {
             </svg>
           </label>
           {/* user drop down */}
-          <details className="dropdown  dropdown-end" >
+          <details className="dropdown  dropdown-end">
             <summary className="m-1 btn space-x-2 rounded-full hover:shadow-xl hover:bg-transparent bg-transparent">
               <FaBars size={20} />
               <img
@@ -192,12 +197,16 @@ const Navbar = () => {
             <ul className="p-2 shadow menu dropdown-content z-10 bg-base-100 rounded-box w-52">
               {user ? (
                 <>
-                  <Link
-                    to={`/dashboard/${formars?.role}`}
-                    className="btn mb-2 text-rose-500 border-rose-500 bg-transparent hover:bg-rose-500 hover:text-white"
-                  >
-                    Dashboard
-                  </Link>
+                  {isLoading && !formars.role && user ? (
+                   <div className="flex justify-center"> <span className="loading loading-spinner loading-md"></span></div>
+                  ) : (
+                    <Link
+                      to={`/dashboard/${formars?.role}`}
+                      className="btn mb-2 text-rose-500 border-rose-500 bg-transparent hover:bg-rose-500 hover:text-white"
+                    >
+                      Dashboard
+                    </Link>
+                  )}
                 </>
               ) : (
                 <>

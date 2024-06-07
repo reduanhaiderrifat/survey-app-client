@@ -1,7 +1,6 @@
-// import { Fade } from "react-awesome-reveal";
+import { Fade } from "react-awesome-reveal";
 import { FaArrowUp, FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
-import { Link } from "react-router-dom";
-// import { Typewriter } from "react-simple-typewriter";
+import { Typewriter } from "react-simple-typewriter";
 const Footer = () => {
   const scrollToTop = () => {
     window.scrollTo({
@@ -17,15 +16,15 @@ const Footer = () => {
             <div className="flex items-center justify-center w-12 h-12 rounded-full dark:bg-violet-600"></div>
             <img className="w-16" src="/logo.png" alt="" />
             <span className="self-center nosifer-regular text-2xl font-semibold">
-              {/* <Typewriter
-                words={["Unity Quest"]}
+              <Typewriter
+                words={["Survey Sense"]}
                 loop={500}
                 cursor
                 cursorStyle="."
                 typeSpeed={70}
                 deleteSpeed={50}
                 delaySpeed={1000}
-              /> */}
+              />
             </span>
           </div>
         </div>
@@ -34,7 +33,7 @@ const Footer = () => {
             <h3 className="tracking-wide uppercase dark:text-gray-900">
               Contact
             </h3>
-            {/* <Fade cascade> */}
+            <Fade cascade>
               <ul className="space-y-1">
                 <li>
                   <a rel="noopener noreferrer" href="#">
@@ -53,13 +52,13 @@ const Footer = () => {
                   </a>
                 </li>
               </ul>
-            {/* </Fade> */}
+            </Fade>
           </div>
           <div className="space-y-3">
             <h3 className="tracking-wide uppercase dark:text-gray-900">
               Ruels & Conditions
             </h3>
-            {/* <Fade cascade> */}
+            <Fade cascade>
               <ul className="space-y-1">
                 <li>
                   <a rel="noopener noreferrer" href="#">
@@ -72,13 +71,13 @@ const Footer = () => {
                   </a>
                 </li>
               </ul>
-            {/* </Fade> */}
+            </Fade>
           </div>
 
           <div className="space-y-3 ">
             <div className="uppercase dark:text-gray-900">Social media</div>
             <div className="flex  justify-around ">
-              {/* <Fade cascade> */}
+              <Fade cascade>
                 <a
                   rel="noopener noreferrer"
                   href="#"
@@ -109,14 +108,14 @@ const Footer = () => {
                 >
                   <FaArrowUp />
                 </a>
-              {/* </Fade> */}
+              </Fade>
             </div>
           </div>
         </div>
       </div>
       <div className="py-6 text-sm text-center dark:text-gray-600">
-        <Link to="/copyright">
-          {/* <Typewriter
+        <a href="#">
+          <Typewriter
             words={["© Copyright 2024. All Rights Reserved."]}
             loop={1}
             cursor
@@ -124,8 +123,8 @@ const Footer = () => {
             typeSpeed={70}
             deleteSpeed={50}
             delaySpeed={1000}
-          /> */}
-        </Link>
+          />
+        </a>
       </div>
     </footer>
   );

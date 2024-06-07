@@ -1,17 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-
 import { PieChart, Pie, Cell, Legend } from "recharts";
 import { useNavigate, useParams } from "react-router-dom";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { IoArrowBack } from "react-icons/io5";
-
+import { useState } from "react";
+import Swal from "sweetalert2";
+import Loader from "../../loader/Loader";
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 const SurveyorDetails = () => {
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
+  const [comments, setComments] = useState([]);
   const { id } = useParams();
   console.log(id);
   const { data: matchIds = [], isLoading } = useQuery({
@@ -40,10 +42,9 @@ const SurveyorDetails = () => {
   const handleBack = () => {
     navigate(-1);
   };
-  if (isLoading) return "loading";
-  if (isPending) return "loading";
+  if (isLoading || isPending) return <Loader/>;
 
-  //custom shape
+  //custom shape chart
 
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
@@ -74,6 +75,25 @@ const SurveyorDetails = () => {
     { name: "Yes", value: totalYesLength },
     { name: "No", value: totalNoLength },
   ];
+
+  const handleSee = async (uid) => {
+    console.log(uid);
+    const { data } = await axiosSecure.get(`/userComments/${uid}`);
+    console.log(data);
+    setComments(data);
+    if (!data.length == 0) {
+      document.getElementById("my_modal_5").showModal();
+    }else{
+      Swal.fire({
+        position: "top-center",
+        icon: "info",
+        title: "Sorry no comments from here",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+   
+  };
   return (
     <div className="">
       <button
@@ -95,13 +115,14 @@ const SurveyorDetails = () => {
 
         <TabPanel>
           <div className="overflow-x-auto">
-            <table  className="table-auto w-full border-collapse border  border-gray-200">
+            <table className="table-auto w-full border-collapse border  border-gray-200">
               {/* head */}
               <thead className="bg-rose-500 text-white">
                 <tr>
                   <th className="border border-gray-200 p-2">Serial No</th>
                   <th className="border border-gray-200 p-2">Name</th>
                   <th className="border border-gray-200 p-2">Email</th>
+                  <th className="border border-gray-200 p-2">User Feedback</th>
                   <th className="border border-gray-200 p-2">Vote</th>
                 </tr>
               </thead>
@@ -114,9 +135,23 @@ const SurveyorDetails = () => {
                 ) : (
                   matchIds.map((info, idx) => (
                     <tr key={info._id} className="hover:bg-gray-50">
-                      <th className="border border-gray-200 p-2 text-center">{idx + 1}</th>
-                      <td className="border border-gray-200 p-2">{info?.name}</td>
-                      <td className="border border-gray-200 p-2">{info?.email}</td>
+                      <th className="border border-gray-200 p-2 text-center">
+                        {idx + 1}
+                      </th>
+                      <td className="border border-gray-200 p-2">
+                        {info?.name}
+                      </td>
+                      <td className="border border-gray-200 p-2">
+                        {info?.email}
+                      </td>
+                      <td className="border border-gray-200 p-2 text-center">
+                        <button
+                          className="bg-rose-500 text-white hover:bg-rose-500 active:scale-95 px-3 py-1 rounded-lg"
+                          onClick={() => handleSee(info?.uid)}
+                        >
+                          see
+                        </button>{" "}
+                      </td>
                       <td className="border border-gray-200 p-2">
                         Yes({info?.answers?.yesAnswers.length}) NO(
                         {info?.answers?.noAnswers.length})
@@ -130,10 +165,15 @@ const SurveyorDetails = () => {
         </TabPanel>
         <TabPanel>
           <div className="flex  flex-col items-center">
-            <p className="text-2xl font-bold mb-2">Total <span className="text-rose-500">Yes</span> Answers: {totalYesLength}</p>
-            <p className="text-2xl font-bold ">Total <span className="text-rose-500">No</span> Answers: {totalNoLength}</p>
-         
-        
+            <p className="text-2xl font-bold mb-2">
+              Total <span className="text-rose-500">Yes</span> Answers:{" "}
+              {totalYesLength}
+            </p>
+            <p className="text-2xl font-bold ">
+              Total <span className="text-rose-500">No</span> Answers:{" "}
+              {totalNoLength}
+            </p>
+
             <PieChart width={400} height={400}>
               <Pie
                 data={pieChartData}
@@ -154,10 +194,27 @@ const SurveyorDetails = () => {
               </Pie>
               <Legend></Legend>
             </PieChart>
-         
           </div>
         </TabPanel>
       </Tabs>
+
+      <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box overflow-scroll">
+          {comments?.map((comment) => (
+            <p key={comment._id} className="p-2 border my-2 break-all">
+              {comment?.comment}
+            </p>
+          ))}
+
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn btn-sm btn-circle btn-ghost absolute right-2  top-0">
+                ✕
+              </button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };

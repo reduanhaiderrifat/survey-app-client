@@ -99,7 +99,7 @@ const CheckOutForm = () => {
         setClientSecret("");
       }
     }
-  };
+  }
   const { data: perfomer = {} } = useQuery({
     queryKey: ["users", user?.uid],
     queryFn: async () => {
@@ -107,7 +107,6 @@ const CheckOutForm = () => {
       return res.data;
     },
   });
-  console.log(perfomer);
   return (
     <form onSubmit={handleSubmit}>
       <CardElement
@@ -132,7 +131,7 @@ const CheckOutForm = () => {
         className="w-full btn bg-rose-500 text-white mt-9 hover:bg-rose-500"
       >
         {perfomer?.role === "admin" ? (
-          <span style={{ color: "black" }}>Admin can't pay for role will change</span>
+          <span style={{ color: "black" }}>Admin can not pay for role will change</span>
         ) : (
           <span style={{ color: "white" }}>Pay</span>
         )}

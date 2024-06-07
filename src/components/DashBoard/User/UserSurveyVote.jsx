@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import usePublic from "../../../hooks/usePublic";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useRef, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
@@ -8,9 +7,10 @@ import Swal from "sweetalert2";
 import { FaTelegramPlane } from "react-icons/fa";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { MdOutlineReportGmailerrorred } from "react-icons/md";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const UserSurveyVote = () => {
-    const axiosPublic = usePublic();
+    const axiosSecure = useAxiosSecure();
     const modalRef = useRef(null);
     const { user } = useAuth();
     const location =useLocation()
@@ -20,7 +20,7 @@ const UserSurveyVote = () => {
     const {data: survey = {}} = useQuery({
         queryKey: ['userSurvey',id],
         queryFn: async () => {
-            const res = await axiosPublic.get(`/userSurvey/${id}`)
+            const res = await axiosSecure.get(`/userSurvey/${id}`)
             return res.data
 
         }
@@ -28,7 +28,7 @@ const UserSurveyVote = () => {
     const { data: role = {} } = useQuery({
         queryKey: ["pro-user", user?.uid],
         queryFn: async () => {
-          const res = await axiosPublic.get(`/pro-user/${user?.uid}`);
+          const res = await axiosSecure.get(`/pro-user/${user?.uid}`);
           return res.data;
         },
       });
@@ -81,12 +81,12 @@ const UserSurveyVote = () => {
         //----------------
         const count = calculateVoteCount();
         console.log(count);
-        const { data } = await axiosPublic.patch(`/userVote/${survey?._id}`, {
+        const { data } = await axiosSecure.patch(`/userVote/${survey?._id}`, {
           vote: count,
         });
-        await axiosPublic.post(`/userVotePost/${survey?._id}`, answers);
+        await axiosSecure.post(`/userVotePost/${survey?._id}`, answers);
         if (data.modifiedCount > 0) {
-          toast.success("Update successful");
+          toast.success("Vote count sent successfully");
         }
     
         const userSurvey = {
@@ -99,8 +99,8 @@ const UserSurveyVote = () => {
           answers: answers,
         };
     
-        const res = await axiosPublic.post(
-          `/userSurveyPost/${user?.uid}`,
+        const res = await axiosSecure.post(
+          `/userSurveyPost`,
           userSurvey
         );
     
@@ -126,7 +126,7 @@ const UserSurveyVote = () => {
           uid: user?.uid,
         };
     
-        const { data } = await axiosPublic.post("/report", reportData);
+        const { data } = await axiosSecure.post("/report", reportData);
         if (data.insertedId) {
           Swal.fire({
             position: "top-center",
@@ -152,7 +152,7 @@ const UserSurveyVote = () => {
           uid: user?.uid,
         };
     
-        const { data } = await axiosPublic.post("/comment", commentData);
+        const { data } = await axiosSecure.post("/comment", commentData);
         if (data.insertedId) {
           Swal.fire({
             position: "top-center",
@@ -205,7 +205,7 @@ const UserSurveyVote = () => {
                     required
                     className="textarea textarea-bordered textarea-lg mt-3 w-full"
                   ></textarea>
-                  <button className="btn">Submit</button>
+                  <button className="btn  bg-rose-500 text-white hover:bg-rose-500">Submit</button>
                 </form>
 
                 <div className="modal-action">
@@ -238,7 +238,7 @@ const UserSurveyVote = () => {
                   required
                   className="textarea textarea-bordered textarea-lg mt-3 w-full"
                 ></textarea>
-                <button className="btn">Submit</button>
+                <button className="btn  bg-rose-500 text-white hover:bg-rose-500">Submit</button>
               </form>
 
               <div className="modal-action">
