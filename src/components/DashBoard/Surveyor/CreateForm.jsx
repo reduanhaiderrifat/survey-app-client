@@ -56,6 +56,8 @@ const CreateForm = () => {
           timer: 1500,
         });
         setLoading(false);
+        form.reset(); 
+        setDeadline(""); 
       }
     } catch (error) {
       console.error("Error creating survey:", error);
@@ -154,7 +156,7 @@ const CreateForm = () => {
             name="category"
             required
           >
-            <option value="" disabled>
+            <option value="" disabled selected>
               Select category
             </option>
             {categories.map((cat, index) => (

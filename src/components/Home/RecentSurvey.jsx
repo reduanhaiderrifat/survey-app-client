@@ -36,7 +36,7 @@ const RecentSurvey = () => {
               key={vote._id}
               className="border rounded-md shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out transform lg:hover:scale-105 my-4"
             >
-              <h1 className="text-center mb-3 text-[18px]">
+              <h1 className="text-center mb-3 text-[16px]">
                 <strong>Category:</strong>{" "}
                 <span className="font-semibold">{vote?.category}</span>
               </h1>

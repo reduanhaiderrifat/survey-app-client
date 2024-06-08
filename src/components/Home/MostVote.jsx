@@ -20,23 +20,23 @@ const MostVote = () => {
         Here
       </h2>
       {isLoading ? (
-    <div className="flex justify-center">
+        <div className="flex justify-center">
           <Vortex
-          visible={true}
-          height="80"
-          width="80"
-          ariaLabel="vortex-loading"
-          wrapperStyle={{}}
-          wrapperClass="vortex-wrapper"
-          colors={["red", "green", "blue", "yellow", "orange", "purple"]}
-        />
-    </div>
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="vortex-loading"
+            wrapperStyle={{}}
+            wrapperClass="vortex-wrapper"
+            colors={["red", "green", "blue", "yellow", "orange", "purple"]}
+          />
+        </div>
       ) : (
         <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 ">
           {votes?.map((vote) => (
             <div
               key={vote._id}
-              className="border rounded-md shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out transform lg:hover:scale-105 my-4"
+              className="border flex flex-col justify-between rounded-md shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out transform lg:hover:scale-105 my-4"
             >
               <div className="bg-blue-500 text-white py-2 rounded-t-md">
                 <h1 className="text-center text-lg font-bold">
@@ -69,7 +69,9 @@ const MostVote = () => {
                     <strong>Q.</strong> {vote?.description2}?
                   </p>
                 </div>
-                <div className="flex items-center justify-between mt-4">
+               
+              </div>
+              <div className="flex items-center justify-between mb-4">
                   <p className="bg-rose-500 text-white px-3 py-1 rounded-full transition duration-300 ease-in-out hover:bg-rose-700">
                     Vote ({vote?.options?.vote})
                   </p>
@@ -77,7 +79,6 @@ const MostVote = () => {
                     Status: {vote?.status}
                   </p>
                 </div>
-              </div>
             </div>
           ))}
         </div>

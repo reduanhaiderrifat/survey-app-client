@@ -9,6 +9,7 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { MdOutlineReportGmailerrorred } from "react-icons/md";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { AiFillDislike, AiFillLike } from "react-icons/ai";
+import Loader from "../../loader/Loader";
 
 const UserSurveyVote = () => {
   const axiosSecure = useAxiosSecure();
@@ -19,7 +20,7 @@ const UserSurveyVote = () => {
   const commentRef = useRef(null);
   const navigate = useNavigate();
   const { id } = useParams();
-  const { data: survey = {} } = useQuery({
+  const { data: survey = {}, isLoading } = useQuery({
     queryKey: ["userSurvey", id],
     queryFn: async () => {
       const res = await axiosSecure.get(`/userSurvey/${id}`);
@@ -81,9 +82,10 @@ const UserSurveyVote = () => {
     }
     //----------------
     const count = calculateVoteCount();
-
+    const voteResponse = await axiosSecure.get(`/userSurvey/${survey._id}`);
+    const currentVote = parseInt(voteResponse.data.options.vote);
     const { data } = await axiosSecure.patch(`/userVote/${survey?._id}`, {
-      vote: count,
+      vote: currentVote + 1,
     });
     await axiosSecure.post(`/userVotePost/${survey?._id}`, answers);
     if (data.modifiedCount > 0) {
@@ -222,7 +224,7 @@ const UserSurveyVote = () => {
       toast.error("You already like or disLike");
     }
   };
-
+  if (isLoading) return <Loader />;
 
   const handleBack = () => {
     navigate(-1);
@@ -240,11 +242,11 @@ const UserSurveyVote = () => {
             </button>
             <div className="flex items-center gap-5">
               <div className="flex gap-1">
-                <button onClick={handleLike} className="">
+                <button onClick={handleLike} className="focus:text-orange-500">
                   <AiFillLike size={25} />
                 </button>{" "}
                 ({likes?.length})
-                <button onClick={handleDisLike} className="">
+                <button onClick={handleDisLike} className="focus:text-orange-500">
                   <AiFillDislike size={25} />
                 </button>{" "}
                 ({dislikes?.length})
@@ -332,12 +334,12 @@ const UserSurveyVote = () => {
                 ({survey?.category})
               </h1>
 
-              <h2 className="text-3xl font-bold mb-4 text-gray-700">
+              <h2 className="text-2xl font-bold mb-4 text-gray-700">
                 .{survey?.title}
               </h2>
               <p className="text-lg mb-6 text-gray-600">
                 {" "}
-                <strong> Q.</strong> {survey?.description}?
+                <strong>Q1.</strong> {survey?.description}?
               </p>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
@@ -361,11 +363,11 @@ const UserSurveyVote = () => {
                   <span>{survey?.options?.No}</span>
                 </div>
               </div>
-              <h2 className="text-3xl font-bold mb-4 mt-7 text-gray-700">
+              <h2 className="text-2xl font-bold mb-4 mt-7 text-gray-700">
                 .{survey?.title1}
               </h2>
               <p className="text-lg mb-6 text-gray-600">
-                <strong> Q. </strong>
+                <strong> Q2. </strong>
                 {survey?.description1}?
               </p>
               <div className="space-y-4">
@@ -390,11 +392,11 @@ const UserSurveyVote = () => {
                   <span>{survey?.options?.No}</span>
                 </div>
               </div>
-              <h2 className="text-3xl font-bold mb-4 mt-5 text-gray-700">
+              <h2 className="text-2xl font-bold mb-4 mt-5 text-gray-700">
                 .{survey?.title2}
               </h2>
               <p className="text-lg mb-6 text-gray-600">
-                <strong> Q. </strong>
+                <strong> Q3. </strong>
                 {survey?.description2}?
               </p>
               <div className="space-y-4">

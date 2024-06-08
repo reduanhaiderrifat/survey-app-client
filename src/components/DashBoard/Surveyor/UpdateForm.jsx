@@ -8,9 +8,9 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const UpdateForm = () => {
   const navigate = useNavigate();
-  const {user} = useAuth()
+  const { user } = useAuth();
   const { id } = useParams();
-
+  const [loading, setLoading] = useState(false);
   const [Yes, setYes] = useState("Yes");
   const [No, setNo] = useState("NO");
   const axiosSecure = useAxiosSecure();
@@ -21,7 +21,7 @@ const UpdateForm = () => {
     "Employee Engagement",
     "Event Feedback",
   ];
-  const { data: survey = {} } = useQuery({
+  const { data: survey = {}, refetch } = useQuery({
     queryKey: ["surveyUpdate", id],
     queryFn: async () => {
       const { data } = await axiosSecure.get(`/surveyUpdate/${id}`);
@@ -31,6 +31,7 @@ const UpdateForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const form = e.target;
     const title = form.title.value;
     const description = form.description.value;
@@ -55,18 +56,25 @@ const UpdateForm = () => {
     };
 
     try {
-      const response = await axiosSecure.put(`/survey/${survey?._id}`, surveyData);
-      if (response.data.modifiedCount>0) {
+      const response = await axiosSecure.put(
+        `/survey/${survey?._id}`,
+        surveyData
+      );
+      setLoading(false);
+      if (response.data.modifiedCount > 0) {
         Swal.fire({
           position: "top-center",
           icon: "success",
-          title: "Your survey has been publish",
+          title: "Your survey has been Update",
           showConfirmButton: false,
           timer: 1500,
         });
+        setLoading(false);
+        await refetch();
       }
     } catch (error) {
       console.error("Error creating survey:", error);
+      setLoading(false);
     }
   };
   const handleBack = () => {
@@ -80,7 +88,7 @@ const UpdateForm = () => {
           onClick={handleBack}
           className="btn hover:bg-rose-500 bg-rose-500 text-white"
         >
-        <IoArrowBack size={25} />  Back
+          <IoArrowBack size={25} /> Back
         </button>
       </div>
       <form onSubmit={handleSubmit}>
@@ -176,11 +184,11 @@ const UpdateForm = () => {
           <select
             className="w-full mt-1 p-2 border border-gray-300 rounded"
             name="category"
-            defaultValue={survey?.category}
+            // defaultValue={survey?.category}
             required
           >
-            <option value="" disabled>
-              Select category
+            <option value={survey?.category}>
+            {survey?.category}
             </option>
             {categories.map((cat, index) => (
               <option key={index} value={cat}>
@@ -203,7 +211,11 @@ const UpdateForm = () => {
           type="submit"
           className="w-full bg-rose-500 text-white p-2 rounded hover:bg-rose-600"
         >
-          Update Survey
+          {loading ? (
+            <span className="loading loading-spinner loading-md"></span>
+          ) : (
+            "Update Survey"
+          )}
         </button>
       </form>
     </div>

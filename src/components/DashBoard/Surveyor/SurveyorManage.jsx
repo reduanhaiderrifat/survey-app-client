@@ -33,7 +33,7 @@ const SurveyorManage = () => {
               <th className="py-3 px-5 text-left">Status</th>
               <th className="py-3 px-5 text-left">Creation Time</th>
               <th className="py-3 px-5 text-left">Deadline</th>
-              <th className="py-3 px-5 text-center">Survey Responses</th>
+              <th className="py-3 px-5 text-center">Responses</th>
               <th className="py-3 px-5 text-center">Action</th>
             </tr>
           </thead>
@@ -46,8 +46,8 @@ const SurveyorManage = () => {
                 <td className="py-3 px-5 border">{survey?.category}</td>
                 <td className="py-3 px-5 border">{survey?.status}</td>
                 <td className="py-3 px-5 border">{new Date(survey.timestamp).toLocaleString()}</td>
-                <td className="py-3 px-5 border">{survey?.deadline}</td>
-                <td className="py-3 px-5 border text-center">
+                <td className="py-3 px-3 border">{survey?.deadline}</td>
+                <td className="py-1 px-2 border text-center">
                   <Link
                     to={`details/${survey?._id}`}
                     className="px-2 py-1  rounded-lg text-white bg-rose-500 active:scale-95"
@@ -55,7 +55,7 @@ const SurveyorManage = () => {
                     Details
                   </Link>
                 </td>
-                <td className="py-3 px-5 border">
+                <td className="py-3 px-2 border">
                   <Link
                     to={`update/${survey._id}`}
                     className="px-2 py-1 rounded-lg text-white bg-rose-500 active:scale-95"

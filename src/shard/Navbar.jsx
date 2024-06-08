@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { FaBars } from "react-icons/fa";
@@ -7,6 +7,8 @@ import usePublic from "../hooks/usePublic";
 
 const Navbar = () => {
   const { user } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const [theme, setTheme] = useState("light");
   const axiosPublic = usePublic();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -25,10 +27,26 @@ const Navbar = () => {
     },
   });
   useEffect(() => {
-    if (user && !formars?.role) {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  const handleRefetch = () => {
+    refetch();
+    setIsOpen(!isOpen);
+  };
+  useEffect(() => {
+    if (isLoading || !formars?.role || user) {
       refetch();
     }
-  }, [user, formars, refetch]);
+  }, [isLoading, formars, refetch, user]);
 
   const links = (
     <>
@@ -181,48 +199,49 @@ const Navbar = () => {
             </svg>
           </label>
           {/* user drop down */}
-          <details className="dropdown  dropdown-end">
-            <summary className="m-1 btn space-x-2 rounded-full hover:shadow-xl hover:bg-transparent bg-transparent">
+          <div
+            onClick={handleRefetch}
+            ref={dropdownRef}
+            className="dropdown  dropdown-end"
+          >
+            <button className="m-1 btn space-x-2 rounded-full hover:shadow-xl hover:bg-transparent bg-transparent">
               <FaBars size={20} />
               <img
                 className="w-10 h-10 rounded-full"
                 src={user?.photoURL || "https://i.ibb.co/kqv0XFH/user.png"}
                 alt=""
               />
-            </summary>
-
-            <ul className="p-2 shadow menu dropdown-content z-10 bg-base-100 rounded-box w-52">
-              {user ? (
-                <>
-                  {isLoading && !formars.role && user ? (
-                   <div className="flex justify-center"> <span className="loading loading-spinner loading-md"></span></div>
-                  ) : (
+            </button>
+            {isOpen && (
+              <ul className="absolute right-0 mt-2 p-2 shadow menu dropdown-content z-10 bg-base-100 rounded-box w-52">
+                {user ? (
+                  <>
                     <Link
                       to={`/dashboard/${formars?.role}`}
                       className="btn mb-2 text-rose-500 border-rose-500 bg-transparent hover:bg-rose-500 hover:text-white"
                     >
                       Dashboard
                     </Link>
-                  )}
-                </>
-              ) : (
-                <>
-                  <Link
-                    to="/login"
-                    className="btn mb-2 text-rose-500 border-rose-500 bg-transparent hover:bg-rose-500 hover:text-white"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/singup"
-                    className="btn text-rose-500 border-rose-500 bg-transparent hover:bg-rose-500 hover:text-white"
-                  >
-                    SingUp
-                  </Link>
-                </>
-              )}
-            </ul>
-          </details>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      className="btn mb-2 text-rose-500 border-rose-500 bg-transparent hover:bg-rose-500 hover:text-white"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/singup"
+                      className="btn text-rose-500 border-rose-500 bg-transparent hover:bg-rose-500 hover:text-white"
+                    >
+                      SingUp
+                    </Link>
+                  </>
+                )}
+              </ul>
+            )}
+          </div>
         </div>
       </div>
     </div>

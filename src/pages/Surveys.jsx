@@ -123,6 +123,7 @@ const Surveys = () => {
                 <th className="py-3 px-5 border">#</th>
                 <th className="py-3 px-5 border">Title</th>
                 <th className="py-3 px-5 border">Description</th>
+                <th className="py-3 px-5 border">Category</th>
                 <th className="py-3 px-5 border">Vote</th>
                 <th className="py-3 px-5 border">Action</th>
               </tr>
@@ -134,6 +135,7 @@ const Surveys = () => {
                   <th className="py-3 px-5 text-center">{idx + 1}</th>
                   <td className="py-3 px-5 ">{survey?.title}</td>
                   <td className="py-3 px-5 ">{survey?.description}</td>
+                  <td className="py-3 px-5 ">{survey?.category}</td>
                   <td className="py-3 px-5 text-center">
                     {survey?.options?.vote}
                   </td>
