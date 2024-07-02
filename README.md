@@ -8,7 +8,7 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
 
-## Survey Sence
+## [Survey Sence](https://survey-app-w3.firebaseapp.com)
 
 Welcome to Survey Connect! This website is designed to facilitate meaningful interactions through surveys. Whether you're looking to create insightful surveys, participate in engaging questionnaires, or analyze feedback, Survey Connect provides a platform for you to achieve your survey goals and make informed decisions.
 
@@ -16,11 +16,18 @@ Welcome to Survey Connect! This website is designed to facilitate meaningful int
 
  Check out the live site [Survey Sence](https://survey-app-w3.firebaseapp.com)
  another live site [Unity Quest](https://survey-app-w3.web.app)
-
-## Admin E-Mail & Password 
-Email: 
-password: 
-
+## NPM Pakage...
+- [react-awesome-reveal](https://www.npmjs.com/package/react-awesome-reveal)
+- [react-google-recaptcha](https://www.npmjs.com/package/react-google-recaptcha)
+- [react-helmet-async](https://www.npmjs.com/package/react-helmet-async)
+- [eact-hook-form](https://www.npmjs.com/package/react-hook-form)
+- [react-icons](https://www.npmjs.com/package/react-hot-toast)
+- [react-hot-toast](https://www.npmjs.com/package/react-icons)
+- [react-loader-spinner](https://www.npmjs.com/package/react-loader-spinner)
+- [react-simple-typewriter](https://www.npmjs.com/package/react-simple-typewriter)
+- [react-tabs](https://www.npmjs.com/package/react-tabs)
+- [recharts](https://www.npmjs.com/package/recharts)
+- [sweetalert2](https://www.npmjs.com/package/sweetalert2)
 ## Features and Characteristics
 
 - Users are limited to participating in only one survey, which they can publish.
